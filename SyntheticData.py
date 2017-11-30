@@ -31,6 +31,7 @@ X = np.transpose(np.array(X))
 print('Data Matrix X:')
 print(X)
 
+# logical_or function satisfying multiple conditions
 def logical_or(inputX):
     x = []
     x = inputX
@@ -43,7 +44,35 @@ def logical_or(inputX):
     else:
         return 0
 
-for i, x in enumerate(X):
+# logical_and function satisfying multiple conditions
+def logical_and(inputX):
+    x = []
+    x = inputX
+    n = len(x)
+    mult_add = x[np.where(x==1)]
+    result = np.sum(mult_add)
 
+    if result == n:
+        return 1
+    else:
+        return 0
+    
+# logical_not function satisfying multiple conditions
+# logical_xor function satisfying multiple conditions
+
+#Training Data
+Z = []
+for i, x in enumerate(X):
+    print('x: ', x)
     y = logical_or(x)
-    print(y)
+    y2 = logical_and(x)
+    print('y (logical_or): ', y)
+    print('y (logical_and): ', y2)
+    x = np.append(x,y)
+    print('z: ', x)
+    Z.append(x)
+    print('')
+
+Z = np.array(Z)
+print('Training Data:')
+print(Z)
