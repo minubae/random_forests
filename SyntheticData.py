@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 from scipy.stats import bernoulli,poisson,norm,expon
 from random import *
 
+# nobs = 100
+# theta = 0.3
+# Y = np.random.binomial(1, theta, nobs)
+
 # print(bernoulli.rvs(prob,size = n))
 # print(norm.rvs(size = N))
 # print(poisson.rvs(1,2,size = N))
@@ -22,7 +26,24 @@ for i in range(p):
     x_i = bernoulli.rvs(prob,size = n)
     X.append(x_i)
 
-X = np.array(X)
+X = np.transpose(np.array(X))
 
 print('Data Matrix X:')
 print(X)
+
+def logical_or(inputX):
+    x = []
+    x = inputX
+    mult_or = x[np.where(x==1)]
+    result = np.sum(mult_or)
+
+    if result != 0:
+        # print('hello')
+        return 1
+    else:
+        return 0
+
+for i, x in enumerate(X):
+
+    y = logical_or(x)
+    print(y)
