@@ -56,11 +56,11 @@ def logical_and(inputX):
         return 1
     else:
         return 0
-    
+
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
 
-#Training Data
+#Training Data Z
 Z = []
 for i, x in enumerate(X):
     print('x: ', x)
