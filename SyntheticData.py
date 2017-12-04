@@ -16,31 +16,43 @@ import graphviz
 # print(expon.rvs(5,size = N))
 
 # Number of Variables (Features)
-p = 4
+p = 20
 # Number of Observations
-n = 20
+n = 100
 # probability of Each Bernoulli trial
 prob =.5
 # Synthetic Data Matrix X
-X = []
-testX  = []
-for i in range(p):
-    #x_i is a random variable for each feature
-    x_i = bernoulli.rvs(prob,size = n)
-    X.append(x_i)
+TrainX = []
+def getTrainData(P, N, Prob):
+    p = P
+    n = N
+    prob = Prob
+    trainX  = []
+    for j in range(p):
+        #x_i is a random variable for each feature
+        x_j = bernoulli.rvs(prob,size = n)
+        trainX.append(x_j)
 
-X = np.transpose(np.array(X))
+    trainX = np.transpose(np.array(trainX))
+    return trainX
 
-# print('Data Matrix X:')
-# print(X)
+TrainX = getTrainData(p, n, prob)
 
-for j in range(p):
-    #x_i is a random variable for each feature
-    x_j = bernoulli.rvs(prob,size = n)
-    testX.append(x_j)
+def getTestData(P, N, Prob):
+    p = P
+    n = N
+    prob = Prob
+    testX  = []
+    for j in range(p):
+        #x_i is a random variable for each feature
+        x_j = bernoulli.rvs(prob,size = n)
+        testX.append(x_j)
 
-testX = np.transpose(np.array(testX))
+    testX = np.transpose(np.array(testX))
+    return testX
 
+TestX = []
+TestX = getTestData(p, n, prob)
 
 # logical_or function satisfying multiple conditions
 def logical_or(inputX):
@@ -70,54 +82,101 @@ def logical_and(inputX):
 
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
+def classify_rule(inputX, prob):
 
-#Training Data Z
-Z = []
-Y =[]
-for i, x in enumerate(X):
-    # print('x: ', x)
-    y = logical_or(x)
-    # y = logical_and(x)
-    # print('y (logical_or): ', y)
-    # print('y (logical_and): ', y2)
-    Y.append(y)
-    # x = np.append(x,y)
-    # print('z: ', x)
-    # Z.append(x)
-    # print('')
-testY = []
+    x = []
+    x = inputX
+    n = len(x)
 
-for j, x in enumerate(testX):
-    # print('x: ', x)
-    y = logical_or(x)
-    # y = logical_and(x)
-    # print('y (logical_or): ', y)
-    # print('y (logical_and): ', y2)
-    testY.append(y)
+    criterion = n*prob
+
+    mult_add = x[np.where(x==1)]
+    result = np.sum(mult_add)
+
+    if result > criterion:
+        return 1
+    else:
+        return 0
+
+def getPrediction(Data):
+    X = Data
+    Y =[]
+    for i, x in enumerate(X):
+        # print('x: ', x)
+        # y = logical_or(x)
+        y = classify_rule(x, 0.5)
+        # y = logical_and(x)
+        # print('y (logical_or): ', y)
+        # print('y (logical_and): ', y2)
+        Y.append(y)
+        # x = np.append(x,y)
+        # print('z: ', x)
+        # Z.append(x)
+        # print('')
+    Y = np.array(Y)
+    return Y
+
+def getAccuracy(TestY, TreeY):
+    sum = 0
+    result = 0
+    testY = TestY
+    treeY = TreeY
+
+    n = len(testY)
+    for i in range(len(testY)):
+        if(testY[i]==treeY[i]):
+            sum+=1
+    result = sum/n
+    return result
 
 
-# Z = np.array(Z)
-Y = np.array(Y)
+
+TrainY = []
+TrainY = getPrediction(TrainX)
+
+print('Train Prediction: ', TrainY)
+print('\n')
+'''
+TestY = []
+TestY = getPrediction(TestX)
 print('Original Data:')
-print(X)
+print(TrainX)
 print('Train_Predict:')
-print(Y)
-
+print(TrainY)
 
 print('Test Data:')
-print(testX)
+print(TestX)
 print('Test_Predict:')
-print(testY)
+print(TestY)
+'''
 
-clf = tree.DecisionTreeRegressor()
-clf = clf.fit(X,Y)
+# print('Tree_Predict: ')
+# print(TreeY)
+# print('Accuracy: ', getAccuracy(TestY, TreeY))
 
-tree_predict = []
-for i in range(10):
-    predict = clf.predict(testX)
-    tree_predict.append(np.array(predict))
-# predict = clf.predict(testX)
+# tree.DecisionTreeRegressor()
+# tree.DecisionTreeClassifier()
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(TrainX,TrainY)
+# TreeY = []
+# TreeY = clf.predict(TestX)
 
-tree_predict = np.array(tree_predict)
-print('DecisionTreePredict: ')
-print(tree_predict)
+sum = 0
+for i  in range(10):
+    testData = getTestData(p, n, prob)
+    # print(testData)
+    testPredict = getPrediction(testData)
+    print('Test Prediction: ', testPredict)
+    treePredict = clf.predict(testData)
+    print('Tree Prediction: ', treePredict)
+
+    accuracy = getAccuracy(testPredict, treePredict)
+    sum += accuracy
+
+    print('Accuracy[',i,']:', accuracy)
+    print('\n')
+    # accuracy = 0
+
+print('* Number of Features: ', p)
+print('* Number of Observations: ', n)
+print('* Average of Accuracy: ', sum/10)
