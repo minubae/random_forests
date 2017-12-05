@@ -104,25 +104,25 @@ def getPrediction(Data):
     Y = np.array(Y)
     return Y
 
-def getAccuracy(TestY, TreeY):
-    sum = 0
-    result = 0
-    testY = TestY
-    treeY = TreeY
-
-    n = len(testY)
-    for i in range(len(testY)):
-        if(testY[i] and treeY[i] == 1):
-            sum+=1
-
-    mult_num = len(testY[np.where(treeY==1)])
-
-    if mult_num != 0:
-        result = sum/mult_num
-        return result
-    else:
-        result = 0
-        return result
+# def getAccuracy(TestY, TreeY):
+#     sum = 0
+#     result = 0
+#     testY = TestY
+#     treeY = TreeY
+#
+#     # n = len(testY)
+#     for i in range(len(testY)):
+#         if(testY[i] == treeY[i]):
+#             sum+=1
+#
+#     mult_num = len(testY[np.where(testY==1)])
+#     print('mult_num: ', mult_num)
+#     if mult_num != 0:
+#         result = sum/mult_num
+#         return result
+#     else:
+#         result = 0
+#         return result
 
 TrainY = []
 TrainY = getPrediction(TrainX)
@@ -149,8 +149,8 @@ print('Accuracy: ', getAccuracy(TestY, TreeY))
 
 # tree.DecisionTreeRegressor()
 # tree.DecisionTreeClassifier()
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(TrainX,TrainY)
+clf1 = tree.DecisionTreeClassifier()
+clf1 = clf1.fit(TrainX,TrainY)
 # TreeY = []
 # TreeY = clf.predict(TestX)
 clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
@@ -159,21 +159,21 @@ clf2 = clf2.fit(TrainX, TrainY)
 
 sum1 = 0
 sum2 = 0
-N = 1000
+N = 100
 for i  in range(N):
     testData = getSynData(p, n, prob)
     # print(testData)
     testPredict = getPrediction(testData)
     print('Test Prediction: ', testPredict)
-    treePredict = clf.predict(testData)
+    treePredict = clf1.predict(testData)
     print('Tree Prediction: ', treePredict)
     rf_predict = clf2.predict(testData)
     print('RFor Prediction: ', rf_predict)
 
-    accuracy1 = getAccuracy(testPredict, treePredict)
+    accuracy1 = clf1.score(testData, testPredict)
     sum1 += accuracy1
 
-    accuracy2 = getAccuracy(testPredict, rf_predict)
+    accuracy2 = clf2.score(testData, testPredict)
     sum2 += accuracy2
 
     print('Tree Accuracy[',i,']:', accuracy1)
