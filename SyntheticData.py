@@ -184,18 +184,22 @@ def getComparision(numVar, numObs, probability):
 
     return avg_accuracy
 
+print(getComparision(5, 100, 0.5))
+print('\n')
+print(getComparision(5, 1000, 0.5))
+print('\n')
+
 print(getComparision(10, 100, 0.5))
 print('\n')
 print(getComparision(10, 1000, 0.5))
-print('\n')
 print('\n')
 
 print(getComparision(20, 100, 0.5))
 print('\n')
 print(getComparision(20, 1000, 0.5))
 print('\n')
-print('\n')
 
 print(getComparision(30, 100, 0.5))
 print('\n')
 print(getComparision(30, 1000, 0.5))
+print('\n')
