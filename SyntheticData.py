@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import bernoulli,poisson,norm,expon
-from random import *
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.ensemble import RandomForestClassifier
-import graphviz
+from sklearn.datasets import make_classification
+# import graphviz
 
 # nobs = 100
 # theta = 0.3
@@ -17,9 +17,9 @@ import graphviz
 # print(expon.rvs(5,size = N))
 
 # Number of Variables (Features)
-p = 4
+p = 10
 # Number of Observations
-n = 10
+n = 100
 # probability of Each Bernoulli trial
 prob =.5
 # Synthetic Data Matrix X
@@ -115,7 +115,7 @@ def getAccuracy(TestY, TreeY):
         if(testY[i] and treeY[i] == 1):
             sum+=1
 
-    mult_num = len(testY[np.where(testY==1)])
+    mult_num = len(testY[np.where(treeY==1)])
 
     if mult_num != 0:
         result = sum/mult_num
@@ -159,7 +159,7 @@ clf2 = clf2.fit(TrainX, TrainY)
 
 sum1 = 0
 sum2 = 0
-N = 100
+N = 1000
 for i  in range(N):
     testData = getSynData(p, n, prob)
     # print(testData)
