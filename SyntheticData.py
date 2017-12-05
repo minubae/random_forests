@@ -4,6 +4,7 @@ from scipy.stats import bernoulli,poisson,norm,expon
 from random import *
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.ensemble import RandomForestClassifier
 import graphviz
 
 # nobs = 100
@@ -16,14 +17,16 @@ import graphviz
 # print(expon.rvs(5,size = N))
 
 # Number of Variables (Features)
-p = 20
+p = 4
 # Number of Observations
-n = 100
+n = 10
 # probability of Each Bernoulli trial
 prob =.5
 # Synthetic Data Matrix X
 TrainX = []
-def getTrainData(P, N, Prob):
+TestX = []
+
+def getSynData(P, N, Prob):
     p = P
     n = N
     prob = Prob
@@ -36,23 +39,8 @@ def getTrainData(P, N, Prob):
     trainX = np.transpose(np.array(trainX))
     return trainX
 
-TrainX = getTrainData(p, n, prob)
-
-def getTestData(P, N, Prob):
-    p = P
-    n = N
-    prob = Prob
-    testX  = []
-    for j in range(p):
-        #x_i is a random variable for each feature
-        x_j = bernoulli.rvs(prob,size = n)
-        testX.append(x_j)
-
-    testX = np.transpose(np.array(testX))
-    return testX
-
-TestX = []
-TestX = getTestData(p, n, prob)
+TrainX = getSynData(p, n, prob)
+TestX = getSynData(p, n, prob)
 
 # logical_or function satisfying multiple conditions
 def logical_or(inputX):
@@ -82,7 +70,7 @@ def logical_and(inputX):
 
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
-def classify_rule(inputX, prob):
+def getDecision(inputX, prob):
 
     x = []
     x = inputX
@@ -104,7 +92,7 @@ def getPrediction(Data):
     for i, x in enumerate(X):
         # print('x: ', x)
         # y = logical_or(x)
-        y = classify_rule(x, 0.5)
+        y = getDecision(x, 0.5)
         # y = logical_and(x)
         # print('y (logical_or): ', y)
         # print('y (logical_and): ', y2)
@@ -124,12 +112,17 @@ def getAccuracy(TestY, TreeY):
 
     n = len(testY)
     for i in range(len(testY)):
-        if(testY[i]==treeY[i]):
+        if(testY[i] and treeY[i] == 1):
             sum+=1
-    result = sum/n
-    return result
 
+    mult_num = len(testY[np.where(testY==1)])
 
+    if mult_num != 0:
+        result = sum/mult_num
+        return result
+    else:
+        result = 0
+        return result
 
 TrainY = []
 TrainY = getPrediction(TrainX)
@@ -148,11 +141,11 @@ print('Test Data:')
 print(TestX)
 print('Test_Predict:')
 print(TestY)
-'''
 
-# print('Tree_Predict: ')
-# print(TreeY)
-# print('Accuracy: ', getAccuracy(TestY, TreeY))
+print('Tree_Predict: ')
+print(TreeY)
+print('Accuracy: ', getAccuracy(TestY, TreeY))
+'''
 
 # tree.DecisionTreeRegressor()
 # tree.DecisionTreeClassifier()
@@ -160,23 +153,36 @@ clf = tree.DecisionTreeClassifier()
 clf = clf.fit(TrainX,TrainY)
 # TreeY = []
 # TreeY = clf.predict(TestX)
+clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
+clf2 = clf2.fit(TrainX, TrainY)
 
-sum = 0
-for i  in range(10):
-    testData = getTestData(p, n, prob)
+
+sum1 = 0
+sum2 = 0
+N = 100
+for i  in range(N):
+    testData = getSynData(p, n, prob)
     # print(testData)
     testPredict = getPrediction(testData)
     print('Test Prediction: ', testPredict)
     treePredict = clf.predict(testData)
     print('Tree Prediction: ', treePredict)
+    rf_predict = clf2.predict(testData)
+    print('RFor Prediction: ', rf_predict)
 
-    accuracy = getAccuracy(testPredict, treePredict)
-    sum += accuracy
+    accuracy1 = getAccuracy(testPredict, treePredict)
+    sum1 += accuracy1
 
-    print('Accuracy[',i,']:', accuracy)
+    accuracy2 = getAccuracy(testPredict, rf_predict)
+    sum2 += accuracy2
+
+    print('Tree Accuracy[',i,']:', accuracy1)
+    print('RF Accuracy[',i,']:', accuracy2)
     print('\n')
     # accuracy = 0
-
+avg_accuracy1 = sum1/N
+avg_accuracy2 = sum2/N
 print('* Number of Features: ', p)
 print('* Number of Observations: ', n)
-print('* Average of Accuracy: ', sum/10)
+print('* Average of Tree Accuracy: ', avg_accuracy1)
+print('* Average of RF Accuracy: ', avg_accuracy2)
