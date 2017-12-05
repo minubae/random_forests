@@ -22,9 +22,7 @@ p = 10
 n = 100
 # probability of Each Bernoulli trial
 prob =.5
-# Synthetic Data Matrix X
-TrainX = []
-TestX = []
+
 
 def getSynData(P, N, Prob):
     p = P
@@ -38,9 +36,6 @@ def getSynData(P, N, Prob):
 
     trainX = np.transpose(np.array(trainX))
     return trainX
-
-TrainX = getSynData(p, n, prob)
-TestX = getSynData(p, n, prob)
 
 # logical_or function satisfying multiple conditions
 def logical_or(inputX):
@@ -124,65 +119,83 @@ def getPrediction(Data):
 #         result = 0
 #         return result
 
-TrainY = []
-TrainY = getPrediction(TrainX)
+def getComparision(numVar, numObs, probability):
 
-print('Train Prediction: ', TrainY)
+    # Synthetic Data Matrix X
+    trainX = []
+    testX = []
+    p = numVar
+    n = numObs
+    prob = probability
+
+    trainX = getSynData(p, n, prob)
+    testX = getSynData(p, n, prob)
+
+
+    trainY = []
+    trainY = getPrediction(trainX)
+
+    # print('Train Prediction: ', trainY)
+    # print('\n')
+
+    # tree.DecisionTreeRegressor()
+    # tree.DecisionTreeClassifier()
+    clf1 = tree.DecisionTreeClassifier()
+    clf1 = clf1.fit(trainX,trainY)
+    # TreeY = []
+    # TreeY = clf.predict(TestX)
+    clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
+    clf2 = clf2.fit(trainX, trainY)
+
+    avg_accuracy = []
+    sum1 = 0
+    sum2 = 0
+    N = 100
+    for i  in range(N):
+        testX = getSynData(p, n, prob)
+        # print(testData)
+        testPredict = getPrediction(testX)
+        # print('Test Prediction: ', testPredict)
+        treePredict = clf1.predict(testX)
+        # print('Tree Prediction: ', treePredict)
+        rf_predict = clf2.predict(testX)
+        # print('RFor Prediction: ', rf_predict)
+
+        accuracy1 = clf1.score(testX, testPredict)
+        sum1 += accuracy1
+
+        accuracy2 = clf2.score(testX, testPredict)
+        sum2 += accuracy2
+
+        # print('Tree Accuracy[',i,']:', accuracy1)
+        # print('RF Accuracy[',i,']:', accuracy2)
+        # print('\n')
+        # accuracy = 0
+    avg_accuracy1 = sum1/N
+    avg_accuracy2 = sum2/N
+
+    avg_accuracy.append(avg_accuracy1)
+    avg_accuracy.append(avg_accuracy2)
+
+    print('* Number of Features: ', p)
+    print('* Number of Observations: ', n)
+    print('* Average of Tree Accuracy: ', avg_accuracy1)
+    print('* Average of RF Accuracy: ', avg_accuracy2)
+
+    return avg_accuracy
+
+print(getComparision(10, 100, 0.5))
 print('\n')
-'''
-TestY = []
-TestY = getPrediction(TestX)
-print('Original Data:')
-print(TrainX)
-print('Train_Predict:')
-print(TrainY)
+print(getComparision(10, 1000, 0.5))
+print('\n')
+print('\n')
 
-print('Test Data:')
-print(TestX)
-print('Test_Predict:')
-print(TestY)
+print(getComparision(20, 100, 0.5))
+print('\n')
+print(getComparision(20, 1000, 0.5))
+print('\n')
+print('\n')
 
-print('Tree_Predict: ')
-print(TreeY)
-print('Accuracy: ', getAccuracy(TestY, TreeY))
-'''
-
-# tree.DecisionTreeRegressor()
-# tree.DecisionTreeClassifier()
-clf1 = tree.DecisionTreeClassifier()
-clf1 = clf1.fit(TrainX,TrainY)
-# TreeY = []
-# TreeY = clf.predict(TestX)
-clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
-clf2 = clf2.fit(TrainX, TrainY)
-
-
-sum1 = 0
-sum2 = 0
-N = 100
-for i  in range(N):
-    testData = getSynData(p, n, prob)
-    # print(testData)
-    testPredict = getPrediction(testData)
-    print('Test Prediction: ', testPredict)
-    treePredict = clf1.predict(testData)
-    print('Tree Prediction: ', treePredict)
-    rf_predict = clf2.predict(testData)
-    print('RFor Prediction: ', rf_predict)
-
-    accuracy1 = clf1.score(testData, testPredict)
-    sum1 += accuracy1
-
-    accuracy2 = clf2.score(testData, testPredict)
-    sum2 += accuracy2
-
-    print('Tree Accuracy[',i,']:', accuracy1)
-    print('RF Accuracy[',i,']:', accuracy2)
-    print('\n')
-    # accuracy = 0
-avg_accuracy1 = sum1/N
-avg_accuracy2 = sum2/N
-print('* Number of Features: ', p)
-print('* Number of Observations: ', n)
-print('* Average of Tree Accuracy: ', avg_accuracy1)
-print('* Average of RF Accuracy: ', avg_accuracy2)
+print(getComparision(30, 100, 0.5))
+print('\n')
+print(getComparision(30, 1000, 0.5))
