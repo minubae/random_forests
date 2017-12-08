@@ -182,22 +182,39 @@ def getComparision(numVar, numObs, probability):
 
     return avg_accuracy
 
-print(getComparision(5, 100, 0.5))
-print('\n')
-print(getComparision(5, 1000, 0.5))
-print('\n')
+# print(getComparision(5, 100, 0.5))
+# print('\n')
+# print(getComparision(5, 1000, 0.5))
+# print('\n')
+#
+# print(getComparision(10, 100, 0.5))
+# print('\n')
+# print(getComparision(10, 1000, 0.5))
+# print('\n')
+#
+# print(getComparision(20, 100, 0.5))
+# print('\n')
+# print(getComparision(20, 1000, 0.5))
+# print('\n')
+#
+# print(getComparision(30, 100, 0.5))
+# print('\n')
+# print(getComparision(30, 1000, 0.5))
+# print('\n')
 
-print(getComparision(10, 100, 0.5))
-print('\n')
-print(getComparision(10, 1000, 0.5))
-print('\n')
+X =[]
+p = 2
+n = 10
+error = 0
+for i in range(p):
+    x = np.random.randint(1, 4, size=n)
+    X.append(x)
 
-print(getComparision(20, 100, 0.5))
-print('\n')
-print(getComparision(20, 1000, 0.5))
-print('\n')
+X = np.transpose(np.array(X))
+print('X: ')
+print(X)
 
-print(getComparision(30, 100, 0.5))
-print('\n')
-print(getComparision(30, 1000, 0.5))
-print('\n')
+# plt.suptitle('Random Numbers')
+# plt.plot(X, 'ro')
+# plt.axis([0, 3, 0, 3])
+# plt.show()
