@@ -113,7 +113,7 @@ def getPrediction(Data):
 #     mult_num = len(testY[np.where(testY==1)])
 #     print('mult_num: ', mult_num)
 #     if mult_num != 0:
-#         result = sum/mult_num
+#         result = sum/n
 #         return result
 #     else:
 #         result = 0
@@ -121,37 +121,35 @@ def getPrediction(Data):
 
 def getComparision(numVar, numObs, probability):
 
-    # Synthetic Data Matrix X
-    trainX = []
-    testX = []
     p = numVar
     n = numObs
     prob = probability
-
-    trainX = getSynData(p, n, prob)
-    testX = getSynData(p, n, prob)
-
-
-    trainY = []
-    trainY = getPrediction(trainX)
-
-    # print('Train Prediction: ', trainY)
-    # print('\n')
-
-    # tree.DecisionTreeRegressor()
-    # tree.DecisionTreeClassifier()
-    clf1 = tree.DecisionTreeClassifier()
-    clf1 = clf1.fit(trainX,trainY)
-    # TreeY = []
-    # TreeY = clf.predict(TestX)
-    clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
-    clf2 = clf2.fit(trainX, trainY)
 
     avg_accuracy = []
     sum1 = 0
     sum2 = 0
     N = 100
     for i  in range(N):
+
+        clf1 = 0
+        clf2 = 0
+        trainX = []
+        trainY = []
+        testX = []
+
+        trainX = getSynData(p, n, prob)
+        testX = getSynData(p, n, prob)
+        trainY = getPrediction(trainX)
+        # print('Train Prediction: ', trainY)
+        # print('\n')
+        # tree.DecisionTreeRegressor()
+        # tree.DecisionTreeClassifier()
+        clf1 = tree.DecisionTreeClassifier()
+        clf1 = clf1.fit(trainX,trainY)
+
+        clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
+        clf2 = clf2.fit(trainX, trainY)
+
         testX = getSynData(p, n, prob)
         # print(testData)
         testPredict = getPrediction(testX)
