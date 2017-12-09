@@ -307,15 +307,19 @@ def getTreeAccuracy(Range, Features, Observations, NumSimulations):
     for i in range(N):
 
         trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction2(trainX)
+        trainY = getRandNumPrediction3(trainX)
 
         clf1 = tree.DecisionTreeClassifier()
         clf1 = clf1.fit(trainX,trainY)
 
         testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction2(testX)
+        testY = getRandNumPrediction3(testX)
+        # print('Test Y: ')
+        # print(testY)
 
         treeY = clf1.predict(testX)
+        # print('Tree Y: ')
+        # print(treeY)
         # accuracy = clf1.score(testX, testY)
         accuracy = getAccuracy(testY, treeY)
 
@@ -340,15 +344,19 @@ def getRfAccuracy(Range, Features, Observations, NumSimulations):
     for i in range(N):
 
         trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction2(trainX)
+        trainY = getRandNumPrediction3(trainX)
 
         clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
         clf2 = clf2.fit(trainX, trainY)
 
         testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction2(testX)
+        testY = getRandNumPrediction3(testX)
+        # print('Test Y: ')
+        # print(testY)
 
         rf_predict = clf2.predict(testX)
+        # print('Rfor Y: ')
+        # print(rf_predict)
         # accuracy = clf2.score(testX, testY)
         accuracy = getAccuracy(testY, rf_predict)
 
@@ -359,9 +367,9 @@ def getRfAccuracy(Range, Features, Observations, NumSimulations):
     return avg_accuracy
 
 ran = 4
-features = 2
+features = 3
 observations = 100
-num_simulations = 100
+num_simulations = 10
 treeAccuracy = getTreeAccuracy(ran, features, observations, num_simulations)
 rfAccuracy = getRfAccuracy(ran, features, observations, num_simulations)
 
