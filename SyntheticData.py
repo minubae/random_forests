@@ -16,11 +16,11 @@ from sklearn.datasets import make_classification
 # print(expon.rvs(5,size = N))
 
 # Number of Variables (Features)
-p = 10
+# p = 10
 # Number of Observations
-n = 100
+# n = 100
 # probability of Each Bernoulli trial
-prob =.5
+# prob =.5
 
 def getSynData(P, N, Prob):
     p = P
@@ -102,7 +102,7 @@ def getAccuracy(Prediction_1, Prediction_2):
     treeY = Prediction_2
 
     n = len(testY)
-    
+
     for i in range(n):
         if(testY[i] == treeY[i]):
             coincidence += 1
@@ -123,7 +123,7 @@ def getRandNumSynData(Range, Features, Observations):
     X = np.transpose(np.array(X))
     return X
 
-def getRandNumPrediction(TrainData):
+def getRandNumPrediction2(TrainData):
 
     trainData = TrainData
 
@@ -139,8 +139,7 @@ def getRandNumPrediction(TrainData):
             trainPrediction.append(y)
 
         if x[0]==1 and x[1]==3:
-            # y = 4
-            y = np.random.randint(4, 6)
+            y = 4
             trainPrediction.append(y)
 
         if x[0]==2 and x[1]==1:
@@ -152,7 +151,7 @@ def getRandNumPrediction(TrainData):
             trainPrediction.append(y)
 
         if x[0]==2 and x[1]==3:
-            y = np.random.randint(1, 4)
+            y = np.random.randint(1, 3)
             trainPrediction.append(y)
 
         if x[0]==3 and x[1]==1:
@@ -165,6 +164,129 @@ def getRandNumPrediction(TrainData):
 
         if x[0]==3 and x[1]==3:
             y = 1
+            trainPrediction.append(y)
+
+    trainPrediction = np.array(trainPrediction)
+    return trainPrediction
+
+def getRandNumPrediction3(TrainData):
+
+    trainData = TrainData
+
+    trainPrediction = []
+    for i, x in enumerate(trainData):
+
+        if x[0]==1 and x[1]==1 and x[2] == 1:
+            # y = np.random.randint(3, 6)
+            y = 1
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==1 and x[2] == 2:
+            # y = np.random.randint(3, 6)
+            y = 2
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==1 and x[2] == 3:
+            # y = np.random.randint(3, 6)
+            y = 3
+            trainPrediction.append(y)
+
+
+        if x[0]==1 and x[1]==2 and x[2] == 1:
+            # y = np.random.randint(1, 3)
+            y = 3
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==2 and x[2] == 2:
+            # y = np.random.randint(1, 3)
+            y = 4
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==2 and x[2] == 3:
+            # y = np.random.randint(1, 3)
+            y = 2
+            trainPrediction.append(y)
+
+
+        if x[0]==1 and x[1]==3 and x[2] == 1:
+            y = np.random.randint(4, 6)
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==3 and x[2] == 2:
+            y = np.random.randint(4, 6)
+            trainPrediction.append(y)
+        if x[0]==1 and x[1]==3 and x[2] == 3:
+            y = np.random.randint(4, 6)
+            trainPrediction.append(y)
+
+        if x[0]==2 and x[1]==1 and x[2] == 1:
+            # y = np.random.randint(1, 4)
+            y = 2
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==1 and x[2] == 2:
+            # y = np.random.randint(1, 4)
+            y = 3
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==1 and x[2] == 3:
+            # y = np.random.randint(1, 4)
+            y =1
+            trainPrediction.append(y)
+
+
+        if x[0]==2 and x[1]==2 and x[2] == 1:
+            y = np.random.randint(3, 5)
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==2 and x[2] == 2:
+            y = np.random.randint(3, 5)
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==2 and x[2] == 3:
+            y = np.random.randint(3, 5)
+            trainPrediction.append(y)
+
+
+        if x[0]==2 and x[1]==3 and x[2] == 1:
+            # y = np.random.randint(1, 4)
+            y = 5
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==3 and x[2] == 2:
+            # y = np.random.randint(1, 4)
+            y = 4
+            trainPrediction.append(y)
+        if x[0]==2 and x[1]==3 and x[2] == 3:
+            # y = np.random.randint(1, 4)
+            y = 2
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==1 and x[2] == 1:
+            # y = np.random.randint(2, 4)
+            y = 3
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==1 and x[2] == 2:
+            # y = np.random.randint(2, 4)
+            y = 4
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==1 and x[2] == 3:
+            # y = np.random.randint(2, 4)
+            y = 1
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==2 and x[2] == 1:
+            # y = np.random.randint(5, 7)
+            y = 1
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==2 and x[2] == 2:
+            # y = np.random.randint(5, 7)
+            y = 2
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==2 and x[2] == 3:
+            # y = np.random.randint(5, 7)
+            y = 4
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==3 and x[2] == 1:
+            y = np.random.randint(1, 3)
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==3 and x[2] == 2:
+            # y = np.random.randint(1, 3)
+            y = 5
+            trainPrediction.append(y)
+        if x[0]==3 and x[1]==3 and x[2] == 3:
+            y = np.random.randint(1, 3)
             trainPrediction.append(y)
 
     trainPrediction = np.array(trainPrediction)
@@ -185,13 +307,13 @@ def getTreeAccuracy(Range, Features, Observations, NumSimulations):
     for i in range(N):
 
         trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction(trainX)
+        trainY = getRandNumPrediction2(trainX)
 
         clf1 = tree.DecisionTreeClassifier()
         clf1 = clf1.fit(trainX,trainY)
 
         testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction(testX)
+        testY = getRandNumPrediction2(testX)
 
         treeY = clf1.predict(testX)
         # accuracy = clf1.score(testX, testY)
@@ -218,13 +340,13 @@ def getRfAccuracy(Range, Features, Observations, NumSimulations):
     for i in range(N):
 
         trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction(trainX)
+        trainY = getRandNumPrediction2(trainX)
 
         clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
         clf2 = clf2.fit(trainX, trainY)
 
         testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction(testX)
+        testY = getRandNumPrediction2(testX)
 
         rf_predict = clf2.predict(testX)
         # accuracy = clf2.score(testX, testY)
@@ -238,7 +360,7 @@ def getRfAccuracy(Range, Features, Observations, NumSimulations):
 
 ran = 4
 features = 2
-observations = 20
+observations = 100
 num_simulations = 100
 treeAccuracy = getTreeAccuracy(ran, features, observations, num_simulations)
 rfAccuracy = getRfAccuracy(ran, features, observations, num_simulations)
