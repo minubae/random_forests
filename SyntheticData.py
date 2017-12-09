@@ -200,19 +200,79 @@ def getComparision(numVar, numObs, probability):
 # print(getComparision(30, 1000, 0.5))
 # print('\n')
 
-X =[]
-p = 2
-n = 10
-error = 0
-for i in range(p):
-    x = np.random.randint(1, 4, size=n)
-    X.append(x)
+def getRandNumSynData(Range, Features, Observations):
+    X =[]
+    p = Features
+    n = Observations
+    ran = Range
+    error = 0
+    for i in range(p):
+        x = np.random.randint(1, ran, size=n)
+        X.append(x)
 
-X = np.transpose(np.array(X))
-print('X: ')
-print(X)
+    X = np.transpose(np.array(X))
+    return X
 
+def getRandNumPrediction(TrainData):
+
+    trainData = TrainData
+
+    trainPrediction = []
+    for i, x in enumerate(trainData):
+
+        if x[0]==1 and x[1]==1:
+            y = 3
+            trainPrediction.append(y)
+
+        if x[0]==1 and x[1]==2:
+            y = 5
+            trainPrediction.append(y)
+
+        if x[0]==1 and x[1]==3:
+            y = 4
+            trainPrediction.append(y)
+
+        if x[0]==2 and x[1]==1:
+            y = 3
+            trainPrediction.append(y)
+
+        if x[0]==2 and x[1]==2:
+            y = 5
+            trainPrediction.append(y)
+
+        if x[0]==2 and x[1]==3:
+            y = np.random.randint(1, 3)
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==1:
+            y = 3
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==2:
+            y = 6
+            trainPrediction.append(y)
+
+        if x[0]==3 and x[1]==3:
+            y = 1
+            trainPrediction.append(y)
+
+    trainPrediction = np.array(trainPrediction)
+    return trainPrediction
+trainX = getRandNumSynData(4, 2, 10)
+# print(trainX)
 # plt.suptitle('Random Numbers')
 # plt.plot(X, 'ro')
 # plt.axis([0, 3, 0, 3])
 # plt.show()
+trainY = getRandNumPrediction(trainX)
+# print('Train Prediction: ', trainY)
+clf1 = tree.DecisionTreeClassifier()
+clf1 = clf1.fit(trainX,trainY)
+
+
+testX = getRandNumSynData(4, 2, 10)
+# print(testX)
+testPredict = getRandNumPrediction(testX)
+print('Test Prediction: ', testPredict)
+treePredict = clf1.predict(testX)
+print('Tree Prediction: ', treePredict)
