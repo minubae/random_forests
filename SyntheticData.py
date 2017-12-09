@@ -10,7 +10,6 @@ from sklearn.datasets import make_classification
 # nobs = 100
 # theta = 0.3
 # Y = np.random.binomial(1, theta, nobs)
-
 # print(bernoulli.rvs(prob,size = n))
 # print(norm.rvs(size = N))
 # print(poisson.rvs(1,2,size = N))
@@ -22,7 +21,6 @@ p = 10
 n = 100
 # probability of Each Bernoulli trial
 prob =.5
-
 
 def getSynData(P, N, Prob):
     p = P
