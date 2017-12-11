@@ -29,7 +29,7 @@ def getSynData(P, N, Prob):
     trainX  = []
     for j in range(p):
         #x_i is a random variable for each feature
-        x_j = bernoulli.rvs(prob,size = n)
+        x_j = bernoulli.rvs(prob, size=n)
         trainX.append(x_j)
 
     trainX = np.transpose(np.array(trainX))
@@ -115,12 +115,8 @@ def getRandNumSynData(Range, Features, Observations):
     p = Features
     n = Observations
     ran = Range
-    error = 0
-    for i in range(p):
-        x = np.random.randint(1, ran, size=n)
-        X.append(x)
-
-    X = np.transpose(np.array(X))
+    # error = 0
+    X = np.random.randint(1, ran, size=(n, p))
     return X
 
 def getRandNumPrediction2(TrainData):
@@ -172,38 +168,45 @@ def getRandNumPrediction2(TrainData):
 def getRandNumPrediction3(TrainData):
 
     trainData = TrainData
-
     trainPrediction = []
+
     for i, x in enumerate(trainData):
 
+        # if x[0]==1 and x[2] == 1:
         if x[0]==1 and x[1]==1 and x[2] == 1:
             # y = np.random.randint(3, 6)
             y = 1
             trainPrediction.append(y)
+        # if x[0]==1 and x[1]==1:
         if x[0]==1 and x[1]==1 and x[2] == 2:
             # y = np.random.randint(3, 6)
             y = 2
             trainPrediction.append(y)
+        # if x[1]==1 and x[2] == 3:
         if x[0]==1 and x[1]==1 and x[2] == 3:
             # y = np.random.randint(3, 6)
             y = 3
             trainPrediction.append(y)
 
 
+        # if x[0]==1 and x[2] == 1:
         if x[0]==1 and x[1]==2 and x[2] == 1:
             # y = np.random.randint(1, 3)
             y = 4
             trainPrediction.append(y)
+        # if x[0]==1 and x[1]==2:
         if x[0]==1 and x[1]==2 and x[2] == 2:
             # y = np.random.randint(1, 3)
             y = 5
             trainPrediction.append(y)
+        # if x[1]==2 and x[2] == 3:
         if x[0]==1 and x[1]==2 and x[2] == 3:
             # y = np.random.randint(1, 3)
             y = 6
             trainPrediction.append(y)
 
 
+        # if x[0]==1 and x[2] == 1:
         if x[0]==1 and x[1]==3 and x[2] == 1:
             y = 7
             # y = np.random.randint(4, 6)
@@ -258,18 +261,20 @@ def getRandNumPrediction3(TrainData):
             y = 18
             trainPrediction.append(y)
 
+
         if x[0]==3 and x[1]==1 and x[2] == 1:
-            # y = np.random.randint(2, 4)
-            y = 19
+            y = np.random.randint(18, 21)
+            # y = 19
             trainPrediction.append(y)
         if x[0]==3 and x[1]==1 and x[2] == 2:
-            # y = np.random.randint(2, 4)
-            y = 20
+            y = np.random.randint(18, 21)
+            # y = 20
             trainPrediction.append(y)
         if x[0]==3 and x[1]==1 and x[2] == 3:
-            # y = np.random.randint(2, 4)
-            y = 21
+            y = np.random.randint(18, 21)
+            # y = 21
             trainPrediction.append(y)
+
 
         if x[0]==3 and x[1]==2 and x[2] == 1:
             # y = np.random.randint(5, 7)
@@ -283,6 +288,7 @@ def getRandNumPrediction3(TrainData):
             # y = np.random.randint(5, 7)
             y = 24
             trainPrediction.append(y)
+
 
         if x[0]==3 and x[1]==3 and x[2] == 1:
             # y = np.random.randint(1, 3)
@@ -301,11 +307,17 @@ def getRandNumPrediction3(TrainData):
     return trainPrediction
 
 
-def getTreeAccuracy(Range, Features, Observations, NumSimulations):
+def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
 
-    accuracy = 0
-    sum_accuracy = 0
-    avg_accuracy = 0
+    tree_accuracy = 0
+    rf_accuracy = 0
+
+    tree_sum_accuracy = 0
+    rf_sum_accuracy = 0
+
+    avg_accuracy = []
+    trainX = []; trainY = []
+    testX = []; testY = []
 
     ran = Range
     N = NumSimulations
@@ -320,57 +332,34 @@ def getTreeAccuracy(Range, Features, Observations, NumSimulations):
         clf1 = tree.DecisionTreeClassifier()
         clf1 = clf1.fit(trainX,trainY)
 
-        testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction3(testX)
-        # print('Test Y: ')
-        # print(testY)
-
-        treeY = clf1.predict(testX)
-        # print('Tree Y: ')
-        # print(treeY)
-        # accuracy = clf1.score(testX, testY)
-        accuracy = getAccuracy(testY, treeY)
-
-        sum_accuracy += accuracy
-
-    avg_accuracy = sum_accuracy/N
-
-    return avg_accuracy
-
-
-def getRfAccuracy(Range, Features, Observations, NumSimulations):
-
-    accuracy = 0
-    sum_accuracy = 0
-    avg_accuracy = 0
-
-    ran = Range
-    N = NumSimulations
-    features = Features
-    observations = Observations
-
-    for i in range(N):
-
-        trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction3(trainX)
-
         clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
         clf2 = clf2.fit(trainX, trainY)
 
         testX = getRandNumSynData(ran, features, observations)
         testY = getRandNumPrediction3(testX)
-        # print('Test Y: ')
-        # print(testY)
 
+        treeY = clf1.predict(testX)
         rf_predict = clf2.predict(testX)
-        # print('Rfor Y: ')
-        # print(rf_predict)
+
+        # accuracy = clf1.score(testX, testY)
         # accuracy = clf2.score(testX, testY)
-        accuracy = getAccuracy(testY, rf_predict)
+        tree_accuracy = getAccuracy(testY, treeY)
+        rf_accuracy = getAccuracy(testY, rf_predict)
 
-        sum_accuracy += accuracy
+        tree_sum_accuracy += tree_accuracy
+        rf_sum_accuracy += rf_accuracy
 
-    avg_accuracy = sum_accuracy/N
+        trainX = []; trainY = []
+        testX = []; testY = []
+
+
+    tree_avg_accuracy = tree_sum_accuracy/N
+    rf_avg_accuracy = rf_sum_accuracy/N
+
+    avg_accuracy.append(tree_avg_accuracy)
+    avg_accuracy.append(rf_avg_accuracy)
+
+    avg_accuracy = np.array(avg_accuracy)
 
     return avg_accuracy
 
@@ -378,10 +367,178 @@ ran = 4
 features = 3
 observations = 100
 num_simulations = 100
-treeAccuracy = getTreeAccuracy(ran, features, observations, num_simulations)
-rfAccuracy = getRfAccuracy(ran, features, observations, num_simulations)
+accuracies = getRandNumAccuracy(ran, features, observations, num_simulations)
 
 print('• Number of Features: ',features)
 print('• Number of Observations: ', observations)
-print('• Tree Accuracy: ', treeAccuracy)
-print('• Rfor Accuracy: ', rfAccuracy)
+print('• Tree Accuracy: ', accuracies[0])
+print('• Rfor Accuracy: ', accuracies[1])
+
+def getSynLinearDataSet2(Slope, Observations, Error):
+
+    error = Error
+    slope = Slope
+    N = Observations
+
+    dataX = []
+    dataY = []
+    X1 = []
+    X2 = []
+
+    for i in range(N):
+        x1 = i/N
+        X1.append(x1)
+    dataX.append(X1)
+
+    for i, x in enumerate(X1):
+        e = np.random.uniform(-error,error)
+        x2 = slope*x + e
+        X2.append(x2)
+
+    dataX.append(X2)
+    dataX = np.transpose(np.array(dataX))
+
+    return dataX
+def getSynLinearDataSet3(Slope1, Slope2, Observations, Error):
+
+    error = Error
+    slope1 = Slope1
+    slope2 = Slope2
+    N = Observations
+
+    dataX = []
+    dataY = []
+    X1 = []
+    X2 = []
+    X3 = []
+
+    for i in range(N):
+        x1 = i/N
+        X1.append(x1)
+    dataX.append(X1)
+
+    for i, x in enumerate(X1):
+        e = np.random.uniform(-error,error)
+        x2 = slope1*x
+        X2.append(x2)
+
+    dataX.append(X2)
+
+    for i, x in enumerate(X2):
+        e = np.random.uniform(-error,error)
+        x3 = slope2*x + e
+        X3.append(x3)
+    dataX.append(X3)
+    dataX = np.transpose(np.array(dataX))
+
+    return dataX
+
+def getLinearDataPrediction2(Slope, DataX):
+
+    slope = Slope
+    dataX = DataX
+    dataY = []
+
+    for x in dataX:
+        if x[1] > slope*x[0]:
+            y = 1
+            dataY.append(y)
+        else:
+            y = 0
+            dataY.append(y)
+
+    dataY = np.array(dataY)
+
+    return dataY
+
+def getLinearDataPrediction3(Slope1,Slope2, DataX):
+
+    slope1 = Slope1
+    slope2 = Slope2
+    dataX = DataX
+    dataY = []
+
+    for x in dataX:
+        if x[2] > slope1*x[0]+slope2*x[1]:
+            y = 1
+            dataY.append(y)
+        else:
+            y = 0
+            dataY.append(y)
+
+    dataY = np.array(dataY)
+
+    return dataY
+
+# dataX = getSynLinearDataSet(0.7, 10, 0.3)
+# dataY = getLinearDataPrediction(0.7, dataX)
+# print(dataY)
+
+def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
+
+    tree_accuracy = 0
+    rf_accuracy = 0
+
+    tree_sum_accuracy = 0
+    rf_sum_accuracy = 0
+
+    tree_avg_accuracy = 0
+    rf_avg_accuracy = 0
+
+    avg_accuracy = []
+    trainX = []; trainY = []
+    testX = []; testY = []
+
+    slope1 = Slope1
+    slope2 = Slope2
+    error = Error
+
+    N = NumSimulations
+    observations = Observations
+
+    for i in range(N):
+
+        trainX = getSynLinearDataSet2(slope1, observations, error)
+        trainY = getLinearDataPrediction2(slope1, trainX)
+
+        testX = getSynLinearDataSet2(slope1, observations, error)
+        testY = getLinearDataPrediction2(slope1, testX)
+
+        # trainX = getSynLinearDataSet3(slope1, slope2, observations, error)
+        # trainY = getLinearDataPrediction3(slope1, slope2, trainX)
+        #
+        # testX = getSynLinearDataSet3(slope1, slope2, observations, error)
+        # testY = getLinearDataPrediction3(slope1, slope2, testX)
+
+        clf1 = tree.DecisionTreeClassifier()
+        clf1 = clf1.fit(trainX,trainY)
+
+        clf2 = RandomForestClassifier(max_depth=4, random_state=0) #max_depth=2, random_state=0
+        clf2 = clf2.fit(trainX, trainY)
+
+        treeY = clf1.predict(testX)
+        rf_predict = clf2.predict(testX)
+
+        tree_accuracy = getAccuracy(testY, treeY)
+        rf_accuracy = getAccuracy(testY, rf_predict)
+
+        tree_sum_accuracy += tree_accuracy
+        rf_sum_accuracy += rf_accuracy
+
+        trainX = []; trainY = []
+        testX = []; testY = []
+
+    tree_avg_accuracy = tree_sum_accuracy/N
+    rf_avg_accuracy = rf_sum_accuracy/N
+
+    avg_accuracy.append(tree_avg_accuracy)
+    avg_accuracy.append(rf_avg_accuracy)
+
+    avg_accuracy = np.array(avg_accuracy)
+    return avg_accuracy
+
+
+
+# linearDataAccuracy = getAccuracyLinearData(0.8, 0.4, 1000, 0.3, 100)
+# print('Tree accuracy: ', linearDataAccuracy[0])
+# print('Rfor accuracy: ', linearDataAccuracy[1])
