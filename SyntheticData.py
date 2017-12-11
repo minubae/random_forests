@@ -192,101 +192,109 @@ def getRandNumPrediction3(TrainData):
 
         if x[0]==1 and x[1]==2 and x[2] == 1:
             # y = np.random.randint(1, 3)
-            y = 3
+            y = 4
             trainPrediction.append(y)
         if x[0]==1 and x[1]==2 and x[2] == 2:
             # y = np.random.randint(1, 3)
-            y = 4
+            y = 5
             trainPrediction.append(y)
         if x[0]==1 and x[1]==2 and x[2] == 3:
             # y = np.random.randint(1, 3)
-            y = 2
+            y = 6
             trainPrediction.append(y)
 
 
         if x[0]==1 and x[1]==3 and x[2] == 1:
-            y = np.random.randint(4, 6)
+            y = 7
+            # y = np.random.randint(4, 6)
             trainPrediction.append(y)
         if x[0]==1 and x[1]==3 and x[2] == 2:
-            y = np.random.randint(4, 6)
+            y = 8
+            # y = np.random.randint(4, 6)
             trainPrediction.append(y)
         if x[0]==1 and x[1]==3 and x[2] == 3:
-            y = np.random.randint(4, 6)
+            y = 9
+            # y = np.random.randint(4, 6)
             trainPrediction.append(y)
 
         if x[0]==2 and x[1]==1 and x[2] == 1:
             # y = np.random.randint(1, 4)
-            y = 2
+            y = 10
             trainPrediction.append(y)
         if x[0]==2 and x[1]==1 and x[2] == 2:
             # y = np.random.randint(1, 4)
-            y = 3
+            y = 11
             trainPrediction.append(y)
         if x[0]==2 and x[1]==1 and x[2] == 3:
             # y = np.random.randint(1, 4)
-            y =1
+            y = 12
             trainPrediction.append(y)
 
 
         if x[0]==2 and x[1]==2 and x[2] == 1:
-            y = np.random.randint(3, 5)
+            y = 13
+            # y = np.random.randint(3, 5)
             trainPrediction.append(y)
         if x[0]==2 and x[1]==2 and x[2] == 2:
-            y = np.random.randint(3, 5)
+            y = 14
+            # y = np.random.randint(3, 5)
             trainPrediction.append(y)
         if x[0]==2 and x[1]==2 and x[2] == 3:
-            y = np.random.randint(3, 5)
+            y = 15
+            # y = np.random.randint(3, 5)
             trainPrediction.append(y)
 
 
         if x[0]==2 and x[1]==3 and x[2] == 1:
             # y = np.random.randint(1, 4)
-            y = 5
+            y = 16
             trainPrediction.append(y)
         if x[0]==2 and x[1]==3 and x[2] == 2:
             # y = np.random.randint(1, 4)
-            y = 4
+            y = 17
             trainPrediction.append(y)
         if x[0]==2 and x[1]==3 and x[2] == 3:
             # y = np.random.randint(1, 4)
-            y = 2
+            y = 18
             trainPrediction.append(y)
 
         if x[0]==3 and x[1]==1 and x[2] == 1:
             # y = np.random.randint(2, 4)
-            y = 3
+            y = 19
             trainPrediction.append(y)
         if x[0]==3 and x[1]==1 and x[2] == 2:
             # y = np.random.randint(2, 4)
-            y = 4
+            y = 20
             trainPrediction.append(y)
         if x[0]==3 and x[1]==1 and x[2] == 3:
             # y = np.random.randint(2, 4)
-            y = 1
+            y = 21
             trainPrediction.append(y)
 
         if x[0]==3 and x[1]==2 and x[2] == 1:
             # y = np.random.randint(5, 7)
-            y = 1
+            y = 22
             trainPrediction.append(y)
         if x[0]==3 and x[1]==2 and x[2] == 2:
             # y = np.random.randint(5, 7)
-            y = 2
+            y = 23
             trainPrediction.append(y)
         if x[0]==3 and x[1]==2 and x[2] == 3:
             # y = np.random.randint(5, 7)
-            y = 4
+            y = 24
             trainPrediction.append(y)
 
         if x[0]==3 and x[1]==3 and x[2] == 1:
-            y = np.random.randint(1, 3)
+            # y = np.random.randint(1, 3)
+            y = 25
             trainPrediction.append(y)
         if x[0]==3 and x[1]==3 and x[2] == 2:
             # y = np.random.randint(1, 3)
-            y = 5
+            y = 26
             trainPrediction.append(y)
         if x[0]==3 and x[1]==3 and x[2] == 3:
-            y = np.random.randint(1, 3)
+            y = 27
+            # y = np.random.randint(1, 3)
             trainPrediction.append(y)
 
     trainPrediction = np.array(trainPrediction)
@@ -369,7 +377,7 @@ def getRfAccuracy(Range, Features, Observations, NumSimulations):
 ran = 4
 features = 3
 observations = 100
-num_simulations = 10
+num_simulations = 100
 treeAccuracy = getTreeAccuracy(ran, features, observations, num_simulations)
 rfAccuracy = getRfAccuracy(ran, features, observations, num_simulations)
 
