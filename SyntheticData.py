@@ -120,7 +120,7 @@ def getRandNumSynData(Range, Features, Observations):
     X = np.random.randint(1, ran, size=(n, p))
     return X
 
-
+'''
 def getRandNumPrediction2(Range, TrainData):
 
     temp = []
@@ -152,8 +152,8 @@ def getRandNumPrediction2(Range, TrainData):
 
     prediction = prediction[index]
     return prediction
-
 '''
+
 def getRandNumPrediction2(Range, TrainData):
 
     trainData = TrainData
@@ -199,7 +199,7 @@ def getRandNumPrediction2(Range, TrainData):
 
     trainPrediction = np.array(trainPrediction)
     return trainPrediction
-'''
+
 def getRandNumPrediction3(Range, TrainData):
 
     trainData = TrainData
@@ -363,7 +363,7 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
     for i in range(N):
 
         trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction2(ran, trainX)
+        trainY = getRandNumPrediction3(ran, trainX)
 
         # print(trainX)
         # print(trainY)
@@ -376,13 +376,12 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
         clf2 = clf2.fit(trainX, trainY)
 
         testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction2(ran, testX)
+        testY = getRandNumPrediction3(ran, testX)
 
-        print(trainX)
-
-        print('Train Y: ')
-        print(trainY)
-        break
+        # print(trainX)
+        # print('Train Y: ')
+        # print(trainY)
+        # break
 
         treeY = clf1.predict(testX)
         rf_predict = clf2.predict(testX)
@@ -412,9 +411,9 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
 
     return avg_accuracy
 
-ran = 3
-features = 2
-observations = 5
+ran = 4
+features = 3
+observations = 100
 num_simulations = 100
 accuracies = getRandNumAccuracy(ran, features, observations, num_simulations)
 
