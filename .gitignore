@@ -1,7 +1,7 @@
 .ipynb_checkpoints
 .DS_Store
 SyntheticDataset.ipynb
-DatasetTest.ipynb
+dataset_test_notebook_01.ipynb
 atom
 __pycache__/
 PredictionAccuracy.py
