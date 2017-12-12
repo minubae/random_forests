@@ -3,3 +3,5 @@
 SyntheticDataset.ipynb
 DatasetTest.ipynb
 atom
+__pycache__/
+PredictionAccuracy.py
