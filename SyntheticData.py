@@ -402,102 +402,47 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
 # print('• Tree Accuracy: ', accuracies[0])
 # print('• Rfor Accuracy: ', accuracies[1])
 
-def getSynLinearDataSet2(Slope, Observations, Error):
+def getSynLinearDataset(features,observations):
 
-    error = Error
-    slope = Slope
-    N = Observations
+    p = features
+    n = observations
+    er = np.random.uniform(0, 0.3)
 
-    dataX = []
-    dataY = []
-    X1 = []
-    X2 = []
+    #np.random.rand(d0,d1,...,dn):
+    #Create an array of the given shape and populate it with random samples
+    #from a uniform distribution over[0,1).
+    beta = beta = np.random.uniform(-1, 1, p-1)#np.random.rand(p)
+    error = np.random.uniform(-er, er, n)
 
-    for i in range(N):
-        x1 = i/N
-        X1.append(x1)
-    dataX.append(X1)
+    x_data = np.random.rand(n,p-1)
+    # x_data = np.random.rand(n,p-1)
+    # x_data = np.insert(x_data, 0, 1, axis=1)
 
-    for i, x in enumerate(X1):
-        e = np.random.uniform(-error,error)
-        x2 = slope*x + e
-        X2.append(x2)
+    x_new = np.dot(x_data, beta)
+    x_new_err = np.add(x_new, error)
+    x_data = np.insert(x_data, p-1, x_new_err, axis=1)
+    x_data = np.insert(x_data, p, x_new, axis=1)
+    # x_data = np.delete(x_data, 0, 1)
 
-    dataX.append(X2)
-    dataX = np.transpose(np.array(dataX))
+    return x_data
 
-    return dataX
+def getLinearDataPrediction(Data):
 
-def getSynLinearDataSet3(Slope1, Slope2, Observations, Error):
+    prediction = []
+    data_x = Data
+    n, p = data_x.shape
 
-    error = Error
-    slope1 = Slope1
-    slope2 = Slope2
-    N = Observations
+    for x in data_x:
 
-    dataX = []
-    dataY = []
-    X1 = []
-    X2 = []
-    X3 = []
-
-    for i in range(N):
-        x1 = i/N
-        X1.append(x1)
-    dataX.append(X1)
-
-    for i, x in enumerate(X1):
-        e = np.random.uniform(-error,error)
-        x2 = slope1*x
-        X2.append(x2)
-
-    dataX.append(X2)
-
-    for i, x in enumerate(X2):
-        e = np.random.uniform(-error,error)
-        x3 = slope2*x + e
-        X3.append(x3)
-    dataX.append(X3)
-    dataX = np.transpose(np.array(dataX))
-
-    return dataX
-
-def getLinearDataPrediction2(Slope, DataX):
-
-    slope = Slope
-    dataX = DataX
-    dataY = []
-
-    for x in dataX:
-        if x[1] > slope*x[0]:
+        if x[p-2] <= x[p-1]:
             y = 1
-            dataY.append(y)
+            prediction.append(y)
         else:
             y = 0
-            dataY.append(y)
+            prediction.append(y)
 
-    dataY = np.array(dataY)
-
-    return dataY
-
-def getLinearDataPrediction3(Slope1,Slope2, DataX):
-
-    slope1 = Slope1
-    slope2 = Slope2
-    dataX = DataX
-    dataY = []
-
-    for x in dataX:
-        if x[2] > slope1*x[0]+slope2*x[1]:
-            y = 1
-            dataY.append(y)
-        else:
-            y = 0
-            dataY.append(y)
-
-    dataY = np.array(dataY)
-
-    return dataY
+    prediction = np.array(prediction)
+    return prediction
 
 def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
 
@@ -562,43 +507,30 @@ def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
 
-def getSynLinearDataset(features,observations):
+def getDataVisualization(Data, Features, Observastions):
 
-    p = features
-    n = observations
-    er = np.random.uniform(0, 0.5)
+    features = Features
+    observations = Observastions
+    data_x = Data
 
-    #np.random.rand
-    #Create an array of the given shape and populate it with random samples
-    #from a uniform distribution over[0,1).
-    beta = np.random.rand(p+1)
-    error = np.random.uniform(-er, er, n)
+    data_x_trp = np.transpose(data_x)
 
-    x_data = np.random.rand(n,p)
-    x_data = np.insert(x_data, 0, 1, axis=1)
+    if features == 2:
 
-    x_dot_beta = np.dot(x_data, beta)
-    x_new = np.add(x_dot_beta, error)
-    x_data = np.insert(x_data, p+1, x_new, axis=1)
-
-    x_data = np.delete(x_data, 0, 1)
-
-    x_data_trp = np.transpose(x_data)
-
-    '''
-    if p == 1:
-
-        plt.plot(x_data_trp[0], x_data_trp[1], 'ro')
-        plt.axis([-0.5, 2, -0.5, 2])
+        plt.plot(data_x_trp[0], data_x_trp[1], 'ro')
+        plt.plot(data_x_trp[2])
+        plt.axis([-0.5, 1.5, -0.5, 1.5])
         plt.show()
 
-    if p == 2:
+    elif features == 3:
 
         fig = plt.figure(figsize=(7,5))
         ax = Axes3D(fig)
 
         # plot data
-        line1 = ax.plot(x_data_trp[0],x_data_trp[1],x_data_trp[2],'ok')
+        line1 = ax.plot(data_x_trp[0],data_x_trp[1],data_x_trp[2],'ok')
+        line2 = ax.plot(x_data[0], x_data[1], x_data[3])
+        # plt.plot(data_x_trp[2])
         #modify axes
         ax.set_xlim(-0.5, 1.5)
         ax.set_ylim(1.5, -0.5)
@@ -608,48 +540,14 @@ def getSynLinearDataset(features,observations):
 
         #display
         plt.show()
-    '''
 
-    return x_data
+    else:
 
-data = getSynLinearDataset(5, 100)
-print(data)
+        return "Sorry, We can not visualize your data."
 
-def getLinearDataPrediction(Data):
-
-    data_x = Data
-    length = len(data_x)
-    temp1 = 0
-    temp2 = 0
-    prediction = []
-    p = len(data_x[0])
-
-    for i, x in enumerate(data_x):
-        for j in range(p-1):
-            temp1 += x[j]
-
-        temp2 = data_x[i][p-1]
-
-        if temp2 > temp1:
-            y = 1
-            prediction.append(y)
-        else:
-            y = 0
-            prediction.append(y)
-        temp1 = 0
-        temp2 = 0
-
-    prediction = np.array(prediction)
-    return prediction
-
+p = 20
+n = 100
+data = getSynLinearDataset(p, n)
+# print(data)
 print(getLinearDataPrediction(data))
-# dataX = getSynLinearDataSet(0.7, 10, 0.3)
-# dataY = getLinearDataPrediction(0.7, dataX)
-# print(dataY)
-
-# observations = 1000
-# print('• Number of Features: ',2)
-# print('• Number of Observations: ', observations)
-# linearDataAccuracy = getAccuracyLinearData(0.8, 0.4, observations, 0.2, 100)
-# print('Tree accuracy: ', linearDataAccuracy[0])
-# print('Rfor accuracy: ', linearDataAccuracy[1])
+getDataVisualization(data, p, n)
