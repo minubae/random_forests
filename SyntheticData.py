@@ -402,28 +402,33 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
 # print('• Tree Accuracy: ', accuracies[0])
 # print('• Rfor Accuracy: ', accuracies[1])
 
-def getSynLinearDataset(features,observations):
+def getSynLinearDataset(features,observations, error):
 
+    data_set = []
     p = features
     n = observations
-    er = np.random.uniform(0, 0.3)
+    err = error
 
     #np.random.rand(d0,d1,...,dn):
     #Create an array of the given shape and populate it with random samples
     #from a uniform distribution over[0,1).
     beta = beta = np.random.uniform(-1, 1, p-1)#np.random.rand(p)
-    error = np.random.uniform(-er, er, n)
+    error_vec = np.random.uniform(-err, err, n)
 
     x_data = np.random.rand(n,p-1)
     # x_data = np.random.rand(n,p-1)
     # x_data = np.insert(x_data, 0, 1, axis=1)
 
     x_new = np.dot(x_data, beta)
-    x_new_err = np.add(x_new, error)
+    x_new_err = np.add(x_new, error_vec)
+
     x_data = np.insert(x_data, p-1, x_new_err, axis=1)
     x_data = np.insert(x_data, p, x_new, axis=1)
     # x_data = np.delete(x_data, 0, 1)
 
+    # data_set.append(x_new)
+    # data_set.append(x_new_err)
+    # data_set = np.transpose(np.array(data_set))
     return x_data
 
 def getLinearDataPrediction(Data):
@@ -444,7 +449,7 @@ def getLinearDataPrediction(Data):
     prediction = np.array(prediction)
     return prediction
 
-def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
+def getAccuracyLinearData(features, observations, error, num_simulations, rf_depth, rf_state):
 
     tree_accuracy = 0
     rf_accuracy = 0
@@ -456,47 +461,47 @@ def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
     rf_avg_accuracy = 0
 
     avg_accuracy = []
-    trainX = []; trainY = []
-    testX = []; testY = []
+    train_x = []; train_y = []
+    test_x = []; test_y = []
 
-    slope1 = Slope1
-    slope2 = Slope2
-    error = Error
+    err = error
 
-    N = NumSimulations
-    observations = Observations
+    N = num_simulations
+    n = observations
+    p = features
+
+    depth = rf_depth
+    state = rf_state
 
     for i in range(N):
 
-        trainX = getSynLinearDataSet2(slope1, observations, error)
-        trainY = getLinearDataPrediction2(slope1, trainX)
+        train_x = getSynLinearDataset(p, n, err)
+        train_y = getLinearDataPrediction(train_x)
 
-        testX = getSynLinearDataSet2(slope1, observations, error)
-        testY = getLinearDataPrediction2(slope1, testX)
-
-        # trainX = getSynLinearDataSet3(slope1, slope2, observations, error)
-        # trainY = getLinearDataPrediction3(slope1, slope2, trainX)
-        #
-        # testX = getSynLinearDataSet3(slope1, slope2, observations, error)
-        # testY = getLinearDataPrediction3(slope1, slope2, testX)
+        test_x = getSynLinearDataset(p, n, err)
+        test_y = getLinearDataPrediction(test_x)
 
         clf1 = tree.DecisionTreeClassifier()
-        clf1 = clf1.fit(trainX,trainY)
+        clf1 = clf1.fit(train_x,train_y)
 
-        clf2 = RandomForestClassifier(max_depth=6, random_state=0) #max_depth=2, random_state=0
-        clf2 = clf2.fit(trainX, trainY)
+        clf2 = RandomForestClassifier() #max_depth=depth, random_state=state
+        clf2 = clf2.fit(train_x, train_y)
 
-        treeY = clf1.predict(testX)
-        rf_predict = clf2.predict(testX)
+        tree_y = clf1.predict(test_x)
+        rf_predict = clf2.predict(test_x)
 
-        tree_accuracy = getAccuracy(testY, treeY)
-        rf_accuracy = getAccuracy(testY, rf_predict)
+        # print('trainprediction:', test_y)
+        # print('tree_prediction:', tree_y)
+        # print('rfor_predection:', rf_predict)
+        # print('\n')
+        tree_accuracy = getAccuracy(test_y, tree_y)
+        rf_accuracy = getAccuracy(test_y, rf_predict)
 
         tree_sum_accuracy += tree_accuracy
         rf_sum_accuracy += rf_accuracy
 
-        trainX = []; trainY = []
-        testX = []; testY = []
+        train_x = []; train_y = []
+        test_x = []; test_y = []
 
     tree_avg_accuracy = tree_sum_accuracy/N
     rf_avg_accuracy = rf_sum_accuracy/N
@@ -545,9 +550,14 @@ def getDataVisualization(Data, Features, Observastions):
 
         return "Sorry, We can not visualize your data."
 
-p = 20
+p = 2
 n = 100
-data = getSynLinearDataset(p, n)
+err = 0.3
+rf_state = 0
+rf_depth = 10
+simulations = 100
+data = getSynLinearDataset(p, n, err)
 # print(data)
-print(getLinearDataPrediction(data))
-getDataVisualization(data, p, n)
+# print(getLinearDataPrediction(data))
+print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
+# getDataVisualization(data, p, n)
