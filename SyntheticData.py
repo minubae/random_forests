@@ -1,6 +1,7 @@
 import numpy as np
 import collections
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.stats import bernoulli,poisson,norm,expon
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
@@ -390,16 +391,16 @@ def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
 
     return avg_accuracy
 
-ran = 4
-features = 2
-observations = 50
-num_simulations = 100
-accuracies = getRandNumAccuracy(ran, features, observations, num_simulations)
-
-print('• Number of Features: ',features)
-print('• Number of Observations: ', observations)
-print('• Tree Accuracy: ', accuracies[0])
-print('• Rfor Accuracy: ', accuracies[1])
+# ran = 4
+# features = 2
+# observations = 50
+# num_simulations = 100
+# accuracies = getRandNumAccuracy(ran, features, observations, num_simulations)
+#
+# print('• Number of Features: ',features)
+# print('• Number of Observations: ', observations)
+# print('• Tree Accuracy: ', accuracies[0])
+# print('• Rfor Accuracy: ', accuracies[1])
 
 def getSynLinearDataSet2(Slope, Observations, Error):
 
@@ -561,9 +562,87 @@ def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
 
+def getSynLinearDataset(features,observations):
 
+    p = features
+    n = observations
+    er = np.random.uniform(0, 0.5)
 
+    #np.random.rand
+    #Create an array of the given shape and populate it with random samples
+    #from a uniform distribution over[0,1).
+    beta = np.random.rand(p+1)
+    error = np.random.uniform(-er, er, n)
 
+    x_data = np.random.rand(n,p)
+    x_data = np.insert(x_data, 0, 1, axis=1)
+
+    x_dot_beta = np.dot(x_data, beta)
+    x_new = np.add(x_dot_beta, error)
+    x_data = np.insert(x_data, p+1, x_new, axis=1)
+
+    x_data = np.delete(x_data, 0, 1)
+
+    x_data_trp = np.transpose(x_data)
+
+    '''
+    if p == 1:
+
+        plt.plot(x_data_trp[0], x_data_trp[1], 'ro')
+        plt.axis([-0.5, 2, -0.5, 2])
+        plt.show()
+
+    if p == 2:
+
+        fig = plt.figure(figsize=(7,5))
+        ax = Axes3D(fig)
+
+        # plot data
+        line1 = ax.plot(x_data_trp[0],x_data_trp[1],x_data_trp[2],'ok')
+        #modify axes
+        ax.set_xlim(-0.5, 1.5)
+        ax.set_ylim(1.5, -0.5)
+        ax.minorticks_on()
+        ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
+        ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
+
+        #display
+        plt.show()
+    '''
+
+    return x_data
+
+data = getSynLinearDataset(5, 100)
+print(data)
+
+def getLinearDataPrediction(Data):
+
+    data_x = Data
+    length = len(data_x)
+    temp1 = 0
+    temp2 = 0
+    prediction = []
+    p = len(data_x[0])
+
+    for i, x in enumerate(data_x):
+        for j in range(p-1):
+            temp1 += x[j]
+
+        temp2 = data_x[i][p-1]
+
+        if temp2 > temp1:
+            y = 1
+            prediction.append(y)
+        else:
+            y = 0
+            prediction.append(y)
+        temp1 = 0
+        temp2 = 0
+
+    prediction = np.array(prediction)
+    return prediction
+
+print(getLinearDataPrediction(data))
 # dataX = getSynLinearDataSet(0.7, 10, 0.3)
 # dataY = getLinearDataPrediction(0.7, dataX)
 # print(dataY)
