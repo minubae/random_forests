@@ -2,6 +2,7 @@
 .DS_Store
 SyntheticDataset.ipynb
 dataset_test_notebook_01.ipynb
+dataset_test_notebook_02.ipynb
 atom
 __pycache__/
 PredictionAccuracy.py
