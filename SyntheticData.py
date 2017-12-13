@@ -550,14 +550,46 @@ def getDataVisualization(Data, Features, Observastions):
 
         return "Sorry, We can not visualize your data."
 
+def getComparison(min_features, max_features, interval, observations, error, num_simulations, rf_depth, rf_state):
+
+    err = error
+    n = observations
+    min_p = min_features
+    max_p = max_features
+    jump = interval
+    simulations = num_simulations
+    depth = rf_depth
+    state = rf_state
+
+    comparison = []
+    features = []
+    acc_vec = []
+    temp = []
+
+    for i in range(min_p, max_p, jump):
+        features.append(i)
+        acc_vec = getAccuracyLinearData(i, n, err, simulations, depth, state)
+        comparison.append(acc_vec)
+
+    comparison = np.array(comparison)
+    comparison = np.insert(comparison, 0, features, axis=1)
+    comparison = np.transpose(comparison)
+
+    return comparison
+
 p = 2
-n = 100
+n = 10
 err = 0.3
 rf_state = 0
 rf_depth = 10
 simulations = 100
-data = getSynLinearDataset(p, n, err)
+
+comparison = getComparison(2, 15, 3, n, err, simulations, rf_depth, rf_state)
+print('Comparison: Tree vs Random Forests')
+print(comparison)
+
+# data = getSynLinearDataset(p, n, err)
 # print(data)
 # print(getLinearDataPrediction(data))
-print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
+# print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
 # getDataVisualization(data, p, n)
