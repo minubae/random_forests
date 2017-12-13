@@ -6,23 +6,7 @@ from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
-
 # import graphviz
-
-# nobs = 100
-# theta = 0.3
-# Y = np.random.binomial(1, theta, nobs)
-# print(bernoulli.rvs(prob,size = n))
-# print(norm.rvs(size = N))
-# print(poisson.rvs(1,2,size = N))
-# print(expon.rvs(5,size = N))
-
-# Number of Variables (Features)
-# p = 10
-# Number of Observations
-# n = 100
-# probability of Each Bernoulli trial
-# prob =.5
 
 def getSynData(P, N, Prob):
     p = P
@@ -36,7 +20,6 @@ def getSynData(P, N, Prob):
 
     trainX = np.transpose(np.array(trainX))
     return trainX
-
 # logical_or function satisfying multiple conditions
 def logical_or(inputX):
     x = []
@@ -49,7 +32,6 @@ def logical_or(inputX):
         return 1
     else:
         return 0
-
 # logical_and function satisfying multiple conditions
 def logical_and(inputX):
     x = []
@@ -62,7 +44,6 @@ def logical_and(inputX):
         return 1
     else:
         return 0
-
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
 def getDecision(inputX, prob):
@@ -121,7 +102,6 @@ def getRandNumSynData(Range, Features, Observations):
     X = np.random.randint(1, ran, size=(n, p))
     return X
 
-
 def getRandNumPrediction2(Range, TrainData):
 
     temp = []; index = []
@@ -153,7 +133,6 @@ def getRandNumPrediction2(Range, TrainData):
 
     output = np.array(output)
     return output
-
 '''
 def getRandNumPrediction2(Range, TrainData):
 
@@ -519,7 +498,6 @@ def getLinearDataPrediction3(Slope1,Slope2, DataX):
 
     return dataY
 
-
 def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
 
     tree_accuracy = 0
@@ -582,6 +560,9 @@ def getAccuracyLinearData(Slope1, Slope2, Observations, Error, NumSimulations):
 
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
+
+
+
 
 # dataX = getSynLinearDataSet(0.7, 10, 0.3)
 # dataY = getLinearDataPrediction(0.7, dataX)
