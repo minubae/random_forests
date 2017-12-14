@@ -522,9 +522,16 @@ def getDataVisualization(Data, Features, Observastions):
 
     if features == 2:
 
-        plt.plot(data_x_trp[0], data_x_trp[1], 'ro')
-        plt.plot(data_x_trp[2])
-        plt.axis([-0.5, 1.5, -0.5, 1.5])
+        plt.title('Observations (n)= %d' % observations)
+        plt.plot(data_x_trp[0], data_x_trp[1], 'ro', label='Observed Data')
+        plt.plot(data_x_trp[2], label='Decision Rule')
+        plt.xlabel('X1', fontsize=12)
+        plt.ylabel('X2', fontsize=12)
+        plt.axis([0, 1, -1, 1])
+        plt.legend(loc='upper right')
+
+        plt.savefig('Data_%d.png' % observations)
+
         plt.show()
 
     elif features == 3:
@@ -630,12 +637,12 @@ rf_state = 0
 rf_depth = 10
 simulations = 100
 
-getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
+# getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
 
 
 
-# data = getSynLinearDataset(p, n, err)
+data = getSynLinearDataset(2, 1000, 0.3)
 # print(data)
 # print(getLinearDataPrediction(data))
 # print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
-# getDataVisualization(data, p, n)
+getDataVisualization(data, 2, 1000)
