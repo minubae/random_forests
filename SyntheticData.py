@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.stats import bernoulli,poisson,norm,expon
 from sklearn import tree
+from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
@@ -494,8 +495,10 @@ def getAccuracyLinearData(features, observations, error, num_simulations, rf_dep
         # print('tree_prediction:', tree_y)
         # print('rfor_predection:', rf_predict)
         # print('\n')
-        tree_accuracy = getAccuracy(test_y, tree_y)
-        rf_accuracy = getAccuracy(test_y, rf_predict)
+        # tree_accuracy = getAccuracy(test_y, tree_y)
+        # rf_accuracy = getAccuracy(test_y, rf_predict)
+        tree_accuracy = accuracy_score(test_y, tree_y)
+        rf_accuracy = accuracy_score(test_y, rf_predict)
 
         tree_sum_accuracy += tree_accuracy
         rf_sum_accuracy += rf_accuracy
@@ -629,7 +632,7 @@ max_p = 100
 p_int = 3
 
 min_n = 10
-max_n = 1000
+max_n = 100
 n_int = 10
 
 err = 0.3
@@ -637,12 +640,12 @@ rf_state = 0
 rf_depth = 10
 simulations = 100
 
-# getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
+getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
 
 
 
-data = getSynLinearDataset(2, 1000, 0.3)
+# data = getSynLinearDataset(2, 1000, 0.3)
 # print(data)
 # print(getLinearDataPrediction(data))
 # print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
-getDataVisualization(data, 2, 1000)
+# getDataVisualization(data, 2, 1000)
