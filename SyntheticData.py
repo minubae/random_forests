@@ -577,16 +577,62 @@ def getComparison(min_features, max_features, interval, observations, error, num
 
     return comparison
 
-p = 2
-n = 10
+def getComparisonVisualization(min_features, max_features, min_obs, max_obs, p_interval, n_interval, error, num_simulations, rf_depth, rf_state):
+
+    min_p = min_features
+    max_p = max_features
+    min_n = min_obs
+    max_n = max_obs
+    p_int = p_interval
+    n_int = n_interval
+    err = error
+    simulations = num_simulations
+    depth = rf_depth
+    state = rf_state
+
+
+    # fig, axes = plt.subplots(nrows=5, ncols=2)
+    # ax0, ax1, ax2, ax3, ax4, ax5 = axes.flatten()
+    # index = 0
+    # for n in range(min_n, max_n, n_int):
+    comparison = getComparison(min_p, max_p, p_int, max_n, err, simulations, depth, state)
+
+    features = comparison[0]
+    tree_accuracy = comparison[1]
+    rf_accuracy = comparison[2]
+
+    plt.title('Observations (n)= %d' % max_n)
+    plt.plot(features, tree_accuracy, '-o', label='Decision Tree')
+    plt.plot(features, rf_accuracy, '-o', label='Random Forests')
+    plt.xlabel('number of features (p)', fontsize=12)
+    plt.ylabel('prediction accuracies (%)', fontsize=12)
+    plt.legend(loc='upper right')
+
+        # index += 1
+
+
+    # fig.tight_layout()
+    plt.savefig('Figure_%d.png' % max_n)
+    plt.show()
+
+    return comparison
+
+min_p = 2
+max_p = 100
+p_int = 3
+
+min_n = 10
+max_n = 1000
+n_int = 10
+
 err = 0.3
 rf_state = 0
 rf_depth = 10
 simulations = 100
 
-comparison = getComparison(2, 15, 3, n, err, simulations, rf_depth, rf_state)
-print('Comparison: Tree vs Random Forests')
-print(comparison)
+getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
+
+
 
 # data = getSynLinearDataset(p, n, err)
 # print(data)
