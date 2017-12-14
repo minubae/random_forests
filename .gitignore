@@ -1,10 +1,7 @@
 .ipynb_checkpoints
 .DS_Store
-SyntheticDataset.ipynb
-dataset_test_notebook_01.ipynb
-dataset_test_notebook_02.ipynb
-demo.png
-atom
 __pycache__/
 outputs/
+notes/
+atom
 PredictionAccuracy.py
