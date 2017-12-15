@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 # import graphviz
 
-def getSynBernoulliDataset(features, observations, probability):
+def get_bernoulli_dataset(features, observations, probability):
     p = features
     n = observations
     prob = probability
@@ -210,7 +210,7 @@ def getAccuracyLinearData(features, observations, error, num_simulations, rf_dep
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
 
-def getDataVisualization(data_type, features, observastions, error):
+def get_data_visualization(data_type, features, observastions, error):
 
     p = features
     n = observastions
@@ -253,7 +253,7 @@ def getDataVisualization(data_type, features, observastions, error):
 
     elif type_x == 'bernoulli':
 
-        data_x = getSynBernoulliDataset(p, n, 0.5)
+        data_x = get_bernoulli_dataset(p, n, 0.5)
         data_x_trp = np.transpose(data_x)
 
         if p == 2:
@@ -375,6 +375,6 @@ simulations = 100
 features = 2
 observations = 100
 # Data Type: 'bernoulli', 'linear'
-data_type = 'linear'
-getDataVisualization(data_type, features, observations, err)
+data_type = 'bernoulli'
+get_data_visualization(data_type, features, observations, err)
 # getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
