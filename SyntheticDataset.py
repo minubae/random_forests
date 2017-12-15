@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 # import graphviz
 
+# Creating Synthetic Bernoulli Dataset
 def getBernoulliDataset(features, observations, probability):
     p = features
     n = observations
@@ -49,7 +50,7 @@ def logical_and(inputX):
         return 0
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
-def getBernoulliPredictionRule(input_x, prob):
+def logical_count(input_x, prob):
 
     x = []
     x = input_x
@@ -66,13 +67,13 @@ def getBernoulliPredictionRule(input_x, prob):
         return 0
 
 def getBernoulliPrediction(data):
-    x = data
+    X = data
     Y =[]
     for i, x_i in enumerate(X):
         # print('x: ', x)
-        # y = logical_or(x)
-        y = predictionRule(x_i, 0.5)
-        # y = logical_and(x)
+        # y = logical_or(x_i)
+        y = logical_count(x_i, 0.5)
+        # y = logical_and(x_i)
         # print('y (logical_or): ', y)
         # print('y (logical_and): ', y2)
         Y.append(y)
@@ -97,7 +98,7 @@ def getAccuracy(prediction_1, prediction_2):
     return result
 
 
-
+# Creating Synthetic Linear Dataset
 def getSynLinearDataset(features,observations, error):
 
     data_set = []
@@ -147,65 +148,8 @@ def getLinearDataPrediction(data):
     prediction = np.array(prediction)
     return prediction
 
-def getAccuracyPredictions(data_type, features, observations, error, num_simulations, rf_depth, rf_state):
 
-    tree_accuracy = 0
-    rf_accuracy = 0
-
-    tree_sum_accuracy = 0
-    rf_sum_accuracy = 0
-
-    tree_avg_accuracy = 0
-    rf_avg_accuracy = 0
-
-    avg_accuracy = []
-    train_x = []; train_y = []
-    test_x = []; test_y = []
-
-    err = error
-    type_x = data_type
-    N = num_simulations
-    n = observations
-    p = features
-
-    depth = rf_depth
-    state = rf_state
-
-    for i in range(N):
-
-        train_x = getSynLinearDataset(p, n, err)
-        train_y = getLinearDataPrediction(train_x)
-
-        test_x = getSynLinearDataset(p, n, err)
-        test_y = getLinearDataPrediction(test_x)
-
-        clf1 = tree.DecisionTreeClassifier()
-        clf1 = clf1.fit(train_x,train_y)
-
-        clf2 = RandomForestClassifier() #max_depth=depth, random_state=state
-        clf2 = clf2.fit(train_x, train_y)
-
-        tree_y = clf1.predict(test_x)
-        rf_predict = clf2.predict(test_x)
-
-        tree_accuracy = accuracy_score(test_y, tree_y)
-        rf_accuracy = accuracy_score(test_y, rf_predict)
-
-        tree_sum_accuracy += tree_accuracy
-        rf_sum_accuracy += rf_accuracy
-
-        train_x = []; train_y = []
-        test_x = []; test_y = []
-
-    tree_avg_accuracy = tree_sum_accuracy/N
-    rf_avg_accuracy = rf_sum_accuracy/N
-
-    avg_accuracy.append(tree_avg_accuracy)
-    avg_accuracy.append(rf_avg_accuracy)
-
-    avg_accuracy = np.array(avg_accuracy)
-    return avg_accuracy
-
+# Getting Data Visualization of a Synthetic Dataset
 def getDataVisualization(data_type, features, observastions, error):
 
     p = features
@@ -287,12 +231,82 @@ def getDataVisualization(data_type, features, observastions, error):
 
         return "Sorry, We can not visualize your data."
 
-def getComparison(data_type, min_features, max_features, interval, observations, error, num_simulations, rf_depth, rf_state):
+# Getting Accuracies from Decision Tree and Random Forest Predictions
+def getAccuracyPredictions(data_type, features, observations, error, num_simulations, rf_depth, rf_state):
+
+    tree_accuracy = 0
+    rf_accuracy = 0
+
+    tree_sum_accuracy = 0
+    rf_sum_accuracy = 0
+
+    tree_avg_accuracy = 0
+    rf_avg_accuracy = 0
+
+    avg_accuracy = []
+    train_x = []; train_y = []
+    test_x = []; test_y = []
+
+    err = error
+    type_x = data_type
+    N = num_simulations
+    n = observations
+    p = features
+
+    depth = rf_depth
+    state = rf_state
+
+    for i in range(N):
+
+        if type_x == 'linear':
+
+            train_x = getSynLinearDataset(p, n, err)
+            train_y = getLinearDataPrediction(train_x)
+
+            test_x = getSynLinearDataset(p, n, err)
+            test_y = getLinearDataPrediction(test_x)
+
+        elif type_x == 'bernoulli':
+
+            train_x = getBernoulliDataset(p, n, 0.5)
+            train_y = getBernoulliPrediction(train_x)
+
+            test_x = getBernoulliDataset(p, n, 0.5)
+            test_y = getBernoulliPrediction(test_x)
+
+
+        clf1 = tree.DecisionTreeClassifier()
+        clf1 = clf1.fit(train_x,train_y)
+
+        clf2 = RandomForestClassifier() #max_depth=depth, random_state=state
+        clf2 = clf2.fit(train_x, train_y)
+
+        tree_y = clf1.predict(test_x)
+        rf_predict = clf2.predict(test_x)
+
+        tree_accuracy = accuracy_score(test_y, tree_y)
+        rf_accuracy = accuracy_score(test_y, rf_predict)
+
+        tree_sum_accuracy += tree_accuracy
+        rf_sum_accuracy += rf_accuracy
+
+        train_x = []; train_y = []
+        test_x = []; test_y = []
+
+    tree_avg_accuracy = tree_sum_accuracy/N
+    rf_avg_accuracy = rf_sum_accuracy/N
+
+    avg_accuracy.append(tree_avg_accuracy)
+    avg_accuracy.append(rf_avg_accuracy)
+
+    avg_accuracy = np.array(avg_accuracy)
+    return avg_accuracy
+
+def getComparison(data_type, features, observations, interval, error, num_simulations, rf_depth, rf_state):
 
     err = error
     n = observations
-    min_p = min_features
-    max_p = max_features
+    p = features
     jump = interval
     simulations = num_simulations
     depth = rf_depth
@@ -304,7 +318,7 @@ def getComparison(data_type, min_features, max_features, interval, observations,
     acc_vec = []
     temp = []
 
-    for i in range(min_p, max_p, jump):
+    for i in range(2, p, jump):
         features.append(i)
         acc_vec = getAccuracyPredictions(type_x, i, n, err, simulations, depth, state)
         comparison.append(acc_vec)
@@ -315,65 +329,57 @@ def getComparison(data_type, min_features, max_features, interval, observations,
 
     return comparison
 
-def getComparisonVisualization(data_type, min_features, max_features, min_obs, max_obs, p_interval, n_interval, error, num_simulations, rf_depth, rf_state):
+def getComparisonVisualization(data_type, features, observations, p_interval, n_interval, error, num_simulations, rf_depth, rf_state):
 
-    min_p = min_features
-    max_p = max_features
-    min_n = min_obs
-    max_n = max_obs
+    p = features
+    n = observations
     p_int = p_interval
     n_int = n_interval
     err = error
     simulations = num_simulations
     depth = rf_depth
     state = rf_state
-
     type_x = data_type
 
+    try:
+        # fig, axes = plt.subplots(nrows=5, ncols=2)
+        # ax0, ax1, ax2, ax3, ax4, ax5 = axes.flatten()
+        # index = 0
+        # for n in range(min_n, max_n, n_int):
+        comparison = getComparison(type_x, p, n, p_int, err, simulations, depth, state)
 
-    # fig, axes = plt.subplots(nrows=5, ncols=2)
-    # ax0, ax1, ax2, ax3, ax4, ax5 = axes.flatten()
-    # index = 0
-    # for n in range(min_n, max_n, n_int):
-    comparison = getComparison(type_x, min_p, max_p, p_int, max_n, err, simulations, depth, state)
+        features = comparison[0]
+        tree_accuracy = comparison[1]
+        rf_accuracy = comparison[2]
 
-    features = comparison[0]
-    tree_accuracy = comparison[1]
-    rf_accuracy = comparison[2]
+        plt.title('Observations (n)= %d' % n)
+        plt.plot(features, tree_accuracy, '-o', label='Decision Tree')
+        plt.plot(features, rf_accuracy, '-o', label='Random Forests')
+        plt.xlabel('number of features (p)', fontsize=12)
+        plt.ylabel('prediction accuracies (%)', fontsize=12)
+        plt.legend(loc='upper right')
 
-    plt.title('Observations (n)= %d' % max_n)
-    plt.plot(features, tree_accuracy, '-o', label='Decision Tree')
-    plt.plot(features, rf_accuracy, '-o', label='Random Forests')
-    plt.xlabel('number of features (p)', fontsize=12)
-    plt.ylabel('prediction accuracies (%)', fontsize=12)
-    plt.legend(loc='upper right')
+        plt.savefig('Figure_%d.png' % n)
+        plt.show()
 
-        # index += 1
+        return comparison
 
+    except ValueError:
 
-    # fig.tight_layout()
-    plt.savefig('Figure_%d.png' % max_n)
-    plt.show()
-
-    return comparison
-
-min_p = 2
-max_p = 100
-p_int = 3
-
-min_n = 10
-max_n = 100
-n_int = 10
+        print('Number of features should be greater than 2. Try again.')
 
 err = 0.2
+p_int = 3
+n_int = 10
+
 rf_state = 0
 rf_depth = 10
 simulations = 100
 
-features = 2
+features = 100
 observations = 100
 # Data Type: 'bernoulli', 'linear'
-# data_type = 'bernoulli'
-data_type = 'linear'
-getDataVisualization(data_type, features, observations, err)
-# getComparisonVisualization(data_type, min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
+data_type = 'bernoulli'
+# data_type = 'linear'
+# getDataVisualization(data_type, features, observations, err)
+getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, rf_depth, rf_state)
