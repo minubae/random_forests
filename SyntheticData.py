@@ -413,11 +413,13 @@ def getSynLinearDataset(features,observations, error):
     #np.random.rand(d0,d1,...,dn):
     #Create an array of the given shape and populate it with random samples
     #from a uniform distribution over[0,1).
-    beta = beta = np.random.uniform(-1, 1, p-1)#np.random.rand(p)
-    error_vec = np.random.uniform(-err, err, n)
+    beta = np.random.uniform(-1, 1, p-1)#np.random.rand(p)
+    # beta = np.random.normal(0, 1, p-1)
+
+    # error_vec = np.random.uniform(-err, err, n)
+    error_vec = np.random.normal(0, err, n)
 
     x_data = np.random.rand(n,p-1)
-    # x_data = np.random.rand(n,p-1)
     # x_data = np.insert(x_data, 0, 1, axis=1)
 
     x_new = np.dot(x_data, beta)
@@ -635,17 +637,17 @@ min_n = 10
 max_n = 100
 n_int = 10
 
-err = 0.3
+err = 0.2
 rf_state = 0
 rf_depth = 10
 simulations = 100
 
-getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
+# getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
 
-
-
-# data = getSynLinearDataset(2, 1000, 0.3)
+features = 2
+observations = 1000
+data = getSynLinearDataset(features, observations, err)
 # print(data)
 # print(getLinearDataPrediction(data))
 # print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
-# getDataVisualization(data, 2, 1000)
+getDataVisualization(data, features, observations)
