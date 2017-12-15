@@ -10,18 +10,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 # import graphviz
 
-def getSynData(P, N, Prob):
-    p = P
-    n = N
-    prob = Prob
-    trainX  = []
-    for j in range(p):
+def getSynBernoulliDataset(features, observations, probability):
+    p = features
+    n = observations
+    prob = probability
+    train_x  = []
+    for i in range(p):
         #x_i is a random variable for each feature
-        x_j = bernoulli.rvs(prob, size=n)
-        trainX.append(x_j)
+        # dice = np.random.randint(n)
+        x_i = bernoulli.rvs(prob, size=n)
+        train_x.append(x_i)
 
-    trainX = np.transpose(np.array(trainX))
-    return trainX
+    train_x = np.transpose(np.array(train_x))
+    return train_x
 # logical_or function satisfying multiple conditions
 def logical_or(inputX):
     x = []
@@ -48,10 +49,10 @@ def logical_and(inputX):
         return 0
 # logical_not function satisfying multiple conditions
 # logical_xor function satisfying multiple conditions
-def getDecision(inputX, prob):
+def prediction_rule(input_x, prob):
 
     x = []
-    x = inputX
+    x = input_x
     n = len(x)
 
     criterion = n*prob
@@ -67,10 +68,10 @@ def getDecision(inputX, prob):
 def getPrediction(Data):
     X = Data
     Y =[]
-    for i, x in enumerate(X):
+    for i, x_i in enumerate(X):
         # print('x: ', x)
         # y = logical_or(x)
-        y = getDecision(x, 0.5)
+        y = prediction_rule(x_i, 0.5)
         # y = logical_and(x)
         # print('y (logical_or): ', y)
         # print('y (logical_and): ', y2)
@@ -94,314 +95,6 @@ def getAccuracy(Prediction_1, Prediction_2):
 
     result = coincidence/n
     return result
-
-def getRandNumSynData(Range, Features, Observations):
-    X =[]
-    p = Features
-    n = Observations
-    ran = Range
-    # error = 0
-    X = np.random.randint(1, ran, size=(n, p))
-    return X
-
-def getRandNumPrediction2(Range, TrainData):
-
-    temp = []; index = []
-    prediction = []; dictY = {}
-
-    ran = Range
-    data = TrainData
-    y = 1
-
-    for i in range(1, ran):
-        for j in range(1, ran):
-
-            temp.append(i)
-            temp.append(j)
-
-            for inx, x in enumerate(data):
-                if np.array_equal(x, temp):
-                    # dictY[inx]=y
-                    dictY[inx] = y
-
-            temp = []
-            y += 1
-
-    prediction = collections.OrderedDict(sorted(dictY.items()))
-    prediction = prediction.values()
-    output = []
-    for i in prediction:
-        output.append(i)
-
-    output = np.array(output)
-    return output
-'''
-def getRandNumPrediction2(Range, TrainData):
-
-    trainData = TrainData
-    ran = Range
-    trainPrediction = []
-    for i, x in enumerate(trainData):
-
-        if x[0]==1 and x[1]==1:
-            y = 3
-            trainPrediction.append(y)
-
-        if x[0]==1 and x[1]==2:
-            y = 5
-            trainPrediction.append(y)
-
-        if x[0]==1 and x[1]==3:
-            y = 4
-            trainPrediction.append(y)
-
-        if x[0]==2 and x[1]==1:
-            y = 3
-            trainPrediction.append(y)
-
-        if x[0]==2 and x[1]==2:
-            y = 5
-            trainPrediction.append(y)
-
-        if x[0]==2 and x[1]==3:
-            y = np.random.randint(1, 3)
-            trainPrediction.append(y)
-
-        if x[0]==3 and x[1]==1:
-            y = 3
-            trainPrediction.append(y)
-
-        if x[0]==3 and x[1]==2:
-            y = 6
-            trainPrediction.append(y)
-
-        if x[0]==3 and x[1]==3:
-            y = 1
-            trainPrediction.append(y)
-
-    trainPrediction = np.array(trainPrediction)
-    return trainPrediction
-'''
-def getRandNumPrediction3(Range, TrainData):
-
-    trainData = TrainData
-    trainPrediction = []
-    ran = Range
-
-    for i, x in enumerate(trainData):
-
-        # if x[0]==1 and x[2] == 1:
-        if x[0]==1 and x[1]==1 and x[2] == 1:
-            # y = np.random.randint(3, 6)
-            y = 1
-            trainPrediction.append(y)
-        # if x[0]==1 and x[1]==1:
-        if x[0]==1 and x[1]==1 and x[2] == 2:
-            # y = np.random.randint(3, 6)
-            y = 2
-            trainPrediction.append(y)
-        # if x[1]==1 and x[2] == 3:
-        if x[0]==1 and x[1]==1 and x[2] == 3:
-            # y = np.random.randint(3, 6)
-            y = 3
-            trainPrediction.append(y)
-
-
-        # if x[0]==1 and x[2] == 1:
-        if x[0]==1 and x[1]==2 and x[2] == 1:
-            # y = np.random.randint(1, 3)
-            y = 4
-            trainPrediction.append(y)
-        # if x[0]==1 and x[1]==2:
-        if x[0]==1 and x[1]==2 and x[2] == 2:
-            # y = np.random.randint(1, 3)
-            y = 5
-            trainPrediction.append(y)
-        # if x[1]==2 and x[2] == 3:
-        if x[0]==1 and x[1]==2 and x[2] == 3:
-            # y = np.random.randint(1, 3)
-            y = 6
-            trainPrediction.append(y)
-
-
-        # if x[0]==1 and x[2] == 1:
-        if x[0]==1 and x[1]==3 and x[2] == 1:
-            y = 7
-            # y = np.random.randint(4, 6)
-            trainPrediction.append(y)
-        if x[0]==1 and x[1]==3 and x[2] == 2:
-            y = 8
-            # y = np.random.randint(4, 6)
-            trainPrediction.append(y)
-        if x[0]==1 and x[1]==3 and x[2] == 3:
-            y = 9
-            # y = np.random.randint(4, 6)
-            trainPrediction.append(y)
-
-        if x[0]==2 and x[1]==1 and x[2] == 1:
-            # y = np.random.randint(1, 4)
-            y = 10
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==1 and x[2] == 2:
-            # y = np.random.randint(1, 4)
-            y = 11
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==1 and x[2] == 3:
-            # y = np.random.randint(1, 4)
-            y = 12
-            trainPrediction.append(y)
-
-
-        if x[0]==2 and x[1]==2 and x[2] == 1:
-            y = 13
-            # y = np.random.randint(3, 5)
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==2 and x[2] == 2:
-            y = 14
-            # y = np.random.randint(3, 5)
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==2 and x[2] == 3:
-            y = 15
-            # y = np.random.randint(3, 5)
-            trainPrediction.append(y)
-
-
-        if x[0]==2 and x[1]==3 and x[2] == 1:
-            # y = np.random.randint(1, 4)
-            y = 16
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==3 and x[2] == 2:
-            # y = np.random.randint(1, 4)
-            y = 17
-            trainPrediction.append(y)
-        if x[0]==2 and x[1]==3 and x[2] == 3:
-            # y = np.random.randint(1, 4)
-            y = 18
-            trainPrediction.append(y)
-
-
-        if x[0]==3 and x[1]==1 and x[2] == 1:
-            y = np.random.randint(18, 21)
-            # y = 19
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==1 and x[2] == 2:
-            y = np.random.randint(18, 21)
-            # y = 20
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==1 and x[2] == 3:
-            y = np.random.randint(18, 21)
-            # y = 21
-            trainPrediction.append(y)
-
-
-        if x[0]==3 and x[1]==2 and x[2] == 1:
-            # y = np.random.randint(5, 7)
-            y = 22
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==2 and x[2] == 2:
-            # y = np.random.randint(5, 7)
-            y = 23
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==2 and x[2] == 3:
-            # y = np.random.randint(5, 7)
-            y = 24
-            trainPrediction.append(y)
-
-
-        if x[0]==3 and x[1]==3 and x[2] == 1:
-            # y = np.random.randint(1, 3)
-            y = 25
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==3 and x[2] == 2:
-            # y = np.random.randint(1, 3)
-            y = 26
-            trainPrediction.append(y)
-        if x[0]==3 and x[1]==3 and x[2] == 3:
-            y = 27
-            # y = np.random.randint(1, 3)
-            trainPrediction.append(y)
-
-    trainPrediction = np.array(trainPrediction)
-    return trainPrediction
-
-def getRandNumAccuracy(Range, Features, Observations, NumSimulations):
-
-    tree_accuracy = 0
-    rf_accuracy = 0
-
-    tree_sum_accuracy = 0
-    rf_sum_accuracy = 0
-
-    avg_accuracy = []
-    trainX = []; trainY = []
-    testX = []; testY = []
-
-    ran = Range
-    N = NumSimulations
-    features = Features
-    observations = Observations
-
-    for i in range(N):
-
-        trainX = getRandNumSynData(ran, features, observations)
-        trainY = getRandNumPrediction2(ran, trainX)
-
-        # print(trainX)
-        # print(trainY)
-        # break
-
-        clf1 = tree.DecisionTreeClassifier()
-        clf1 = clf1.fit(trainX,trainY)
-
-        clf2 = RandomForestClassifier(max_depth=6, random_state=0) #max_depth=2, random_state=0
-        clf2 = clf2.fit(trainX, trainY)
-
-        testX = getRandNumSynData(ran, features, observations)
-        testY = getRandNumPrediction2(ran, testX)
-
-        # print(trainX)
-        # print('Train Y: ')
-        # print(trainY)
-        # break
-
-        treeY = clf1.predict(testX)
-        rf_predict = clf2.predict(testX)
-
-        # print(treeY)
-        # print(rf_predict)
-
-        # accuracy = clf1.score(testX, testY)
-        # accuracy = clf2.score(testX, testY)
-        tree_accuracy = getAccuracy(testY, treeY)
-        rf_accuracy = getAccuracy(testY, rf_predict)
-
-        tree_sum_accuracy += tree_accuracy
-        rf_sum_accuracy += rf_accuracy
-
-        trainX = []; trainY = []
-        testX = []; testY = []
-
-
-    tree_avg_accuracy = tree_sum_accuracy/N
-    rf_avg_accuracy = rf_sum_accuracy/N
-
-    avg_accuracy.append(tree_avg_accuracy)
-    avg_accuracy.append(rf_avg_accuracy)
-
-    avg_accuracy = np.array(avg_accuracy)
-
-    return avg_accuracy
-
-# ran = 4
-# features = 2
-# observations = 50
-# num_simulations = 100
-# accuracies = getRandNumAccuracy(ran, features, observations, num_simulations)
-#
-# print('• Number of Features: ',features)
-# print('• Number of Observations: ', observations)
-# print('• Tree Accuracy: ', accuracies[0])
-# print('• Rfor Accuracy: ', accuracies[1])
 
 def getSynLinearDataset(features,observations, error):
 
@@ -517,43 +210,79 @@ def getAccuracyLinearData(features, observations, error, num_simulations, rf_dep
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
 
-def getDataVisualization(Data, Features, Observastions):
+def getDataVisualization(data_type, features, observastions, error):
 
-    features = Features
-    observations = Observastions
-    data_x = Data
+    p = features
+    n = observastions
+    err = error
+    type_x = data_type
 
-    data_x_trp = np.transpose(data_x)
+    if type_x == 'linear':
 
-    if features == 2:
+        data_x = getSynLinearDataset(p, n, err)
+        data_x_trp = np.transpose(data_x)
 
-        plt.title('Observations (n)= %d' % observations)
-        plt.plot(data_x_trp[0], data_x_trp[1], 'ro', label='Observed Data')
-        plt.plot(data_x_trp[2], label='Decision Rule')
-        plt.xlabel('X1', fontsize=12)
-        plt.ylabel('X2', fontsize=12)
-        plt.axis([0, 1, -1, 1])
-        plt.legend(loc='upper right')
+        if p == 2:
+            plt.title('Observations (n)= %d' % n)
+            plt.plot(data_x_trp[0], data_x_trp[1], 'ro', label='Observed Data')
+            plt.plot(data_x_trp[2], label='Decision Rule')
+            plt.xlabel('X1', fontsize=12)
+            plt.ylabel('X2', fontsize=12)
+            plt.axis([0, 1, -1, 1])
+            # plt.axis([-0.5, 1.5, -0.5, 1.5])
+            plt.legend(loc='upper right')
 
-        plt.savefig('Data_%d.png' % observations)
+            plt.savefig('Data_%d.png' % n)
 
+        elif p == 3:
+            fig = plt.figure(figsize=(7,5))
+            ax = Axes3D(fig)
+
+            # plot data
+            line1 = ax.plot(data_x_trp[0],data_x_trp[1],data_x_trp[2],'ok')
+            line2 = ax.plot(x_data[0], x_data[1], x_data[3])
+            # plt.plot(data_x_trp[2])
+            #modify axes
+            ax.set_xlim(-0.5, 1.5)
+            ax.set_ylim(1.5, -0.5)
+            ax.minorticks_on()
+            ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
+            ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
+        #display
         plt.show()
 
-    elif features == 3:
+    elif type_x == 'bernoulli':
 
-        fig = plt.figure(figsize=(7,5))
-        ax = Axes3D(fig)
+        data_x = getSynBernoulliDataset(p, n, 0.5)
+        data_x_trp = np.transpose(data_x)
 
-        # plot data
-        line1 = ax.plot(data_x_trp[0],data_x_trp[1],data_x_trp[2],'ok')
-        line2 = ax.plot(x_data[0], x_data[1], x_data[3])
-        # plt.plot(data_x_trp[2])
-        #modify axes
-        ax.set_xlim(-0.5, 1.5)
-        ax.set_ylim(1.5, -0.5)
-        ax.minorticks_on()
-        ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
-        ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
+        if p == 2:
+
+            plt.title('Observations (n)= %d' % n)
+            plt.plot(data_x_trp[0], data_x_trp[1], 'ro', label='Observed Data')
+            # plt.plot(data_x_trp[2], label='Decision Rule')
+            plt.xlabel('X1', fontsize=12)
+            plt.ylabel('X2', fontsize=12)
+            # plt.axis([0, 1, -1, 1])
+            plt.axis([-0.5, 1.5, -0.5, 1.5])
+            plt.legend(loc='upper right')
+
+            plt.savefig('Data_%d.png' % n)
+
+        elif p == 3:
+
+            fig = plt.figure(figsize=(7,5))
+            ax = Axes3D(fig)
+
+            # plot data
+            line = ax.plot(data_x_trp[0],data_x_trp[1],data_x_trp[2],'ok')
+            ax.set_title('Observations (n)= %d' % n)
+            #modify axes
+            ax.set_xlim(-0.5, 1.5)
+            ax.set_ylim(1.5, -0.5)
+            ax.minorticks_on()
+            ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
+            ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
 
         #display
         plt.show()
@@ -580,6 +309,7 @@ def getComparison(min_features, max_features, interval, observations, error, num
 
     for i in range(min_p, max_p, jump):
         features.append(i)
+        # if data_type == 'linear':
         acc_vec = getAccuracyLinearData(i, n, err, simulations, depth, state)
         comparison.append(acc_vec)
 
@@ -642,12 +372,9 @@ rf_state = 0
 rf_depth = 10
 simulations = 100
 
-# getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
-
 features = 2
-observations = 1000
-data = getSynLinearDataset(features, observations, err)
-# print(data)
-# print(getLinearDataPrediction(data))
-# print(getAccuracyLinearData(p,n,err,simulations,rf_depth,rf_state))
-getDataVisualization(data, features, observations)
+observations = 100
+# Data Type: 'bernoulli', 'linear'
+data_type = 'linear'
+getDataVisualization(data_type, features, observations, err)
+# getComparisonVisualization(min_p, max_p, min_n, max_n, p_int, n_int, err, simulations, rf_depth, rf_state)
