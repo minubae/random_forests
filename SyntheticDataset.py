@@ -141,8 +141,8 @@ def getBernoulliPrediction(data):
     Y =[]
     for i, x_i in enumerate(X):
         # print('x: ', x)
-        # y = logical_or(x_i)
-        y = logical_count(x_i, 0.5)
+        y = logical_or(x_i)
+        # y = logical_count(x_i, 0.5)
         # y = logical_and(x_i)
         # print('y (logical_or): ', y)
         # print('y (logical_and): ', y2)
@@ -389,7 +389,7 @@ def getDataVisualization(data_type, features, observastions, error, mu, variance
         if p == 2:
 
             plt.title('Observations (n)= %d' % n)
-            plt.suptitle('Bernoulli Dataset', x=0.514, y=0.96, fontsize=10)
+            plt.suptitle('Bernoulli Dataset (prob = 0.5)', x=0.514, y=0.96, fontsize=10)
             plt.plot(data_x_trp[0], data_x_trp[1], 'ro', label='Observed Data')
             # plt.plot(data_x_trp[2], label='Decision Rule')
             plt.xlabel('X1', fontsize=12)
@@ -511,12 +511,12 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
     if type_x == 'bernoulli':
 
         plt.title('Observations (n)= %d' % n)
-        plt.suptitle('Bernoulli Data', x=0.514, y=0.96, fontsize=10)
+        plt.suptitle('Bernoulli Data (prob = 0.5)', x=0.514, y=0.96, fontsize=10)
         plt.plot(feature_vec, tree_accuracy, '-o', label='Decision Tree')
         plt.plot(feature_vec, rf_accuracy, '-o', label='Random Forests')
         plt.xlabel('number of features (p)', fontsize=12)
         plt.ylabel('prediction accuracies (%)', fontsize=12)
-        plt.legend(loc='upper right')
+        plt.legend(loc='lower right')
 
         plt.savefig('bernoulli_figure_%d.png' % n)
 
@@ -565,33 +565,33 @@ p_int = 2
 n_int = 10
 
 mu = 0
-# variance = 0.2
+variance = 0.2
 # variance = 0.8
 # variance = 1.6
-variance = 3.2
+# variance = 3.2
 
 simulations = 100
 
-features = 2
-observations = 1000
+# features = 2
+# observations = 1000
 
-# features = 100
+features = 100
 # observations = 200
 # observations = 600
 # observations = 800
-# observations = 1000
+observations = 1000
 random = 'shuffle'
 # random = 'nope'
 
 # Data Type: 'bernoulli', 'linear', 'normal'
-# data_type = 'bernoulli'
+data_type = 'bernoulli'
 # data_type = 'normal'
-data_type = 'linear'
+# data_type = 'linear'
 
 
 # data = getSynIndNormalDataset(10, 10, mu, variance)
 # print(data)
 # print('prediction')
 # print(getNormalDataPrediction(data, 10, 1, 'shuffle'))
-getDataVisualization(data_type, features, observations, err, mu, variance)
-# getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
+# getDataVisualization(data_type, features, observations, err, mu, variance)
+getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
