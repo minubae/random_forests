@@ -336,6 +336,22 @@ def getAccuracyPredictions(data_type, features, observations, error, num_simulat
     avg_accuracy = np.array(avg_accuracy)
     return avg_accuracy
 
+def getSumSquaresCovariance(data):
+    x = data
+    cov_x = np.cov(x)
+    sum_squares = 0
+    temp = []
+
+    for i, xi in enumerate(cov_x):
+        for j, x in enumerate(xi):
+            if i<j:
+                temp.append(x**2)
+
+    temp = np.array(temp)
+    sum_squares = np.sum(temp)
+
+    return sum_squares
+
 # Getting Data Visualization of a Synthetic Dataset
 def getDataVisualization(data_type, features, observastions, error, mu, variance):
 
