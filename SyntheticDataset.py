@@ -38,6 +38,7 @@ def getSynLinearDataset(features,observations, error):
     #from a uniform distribution over[0,1).
     beta = np.random.uniform(-1, 1, p-1)#np.random.rand(p)
     # beta = np.random.normal(0, 1, p-1)
+    # beta = np.random.uniform(0.5, 1, p-1)
 
     # error_vec = np.random.uniform(-err, err, n)
     error_vec = np.random.normal(0, err, n)
@@ -572,26 +573,26 @@ variance = 0.2
 
 simulations = 100
 
-# features = 2
-# observations = 1000
+features = 2
+observations = 1000
 
-features = 100
+# features = 100
 # observations = 200
 # observations = 600
 # observations = 800
-observations = 1000
+# observations = 1000
 random = 'shuffle'
 # random = 'nope'
 
 # Data Type: 'bernoulli', 'linear', 'normal'
-data_type = 'bernoulli'
+# data_type = 'bernoulli'
 # data_type = 'normal'
-# data_type = 'linear'
+data_type = 'linear'
 
 
 # data = getSynIndNormalDataset(10, 10, mu, variance)
 # print(data)
 # print('prediction')
 # print(getNormalDataPrediction(data, 10, 1, 'shuffle'))
-# getDataVisualization(data_type, features, observations, err, mu, variance)
-getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
+getDataVisualization(data_type, features, observations, err, mu, variance)
+# getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
