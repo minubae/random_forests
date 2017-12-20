@@ -337,20 +337,95 @@ def getAccuracyPredictions(data_type, features, observations, error, num_simulat
     return avg_accuracy
 
 def getSumSquaresCovariance(data):
-    x = data
+
+    x = np.transpose(data)
+    # x = data
+    np.random.shuffle(x)
     cov_x = np.cov(x)
+    # cov_x = np.transpose(cov_x)
+
+    # print(cov_x)
     sum_squares = 0
     temp = []
 
     for i, xi in enumerate(cov_x):
         for j, x in enumerate(xi):
             if i<j:
+                # print(x)
                 temp.append(x**2)
 
-    temp = np.array(temp)
+    # print(temp)
     sum_squares = np.sum(temp)
 
     return sum_squares
+
+def SSCovarianceVisualization(features, observations, p_interval, n_interval, error, num_simulations, mu, variance, shuffle):
+
+    err = error
+    p = features
+    n = observations
+    p_int = p_interval
+    n_int = n_interval
+    simulations = num_simulations
+    random = shuffle
+    var = variance
+    m = mu
+
+    feature_vec = []
+    data_01 = []; temp_01 = []
+    data_02 = []; temp_02 = []
+    data_03 = []; temp_03 = []
+
+    ss_cov_01 = []
+    ss_cov_02 = []
+    ss_cov_03 = []
+
+    for i in range(0, p, p_int):
+
+        if i > 1:
+            feature_vec.append(i)
+
+        for j in range(simulations):
+
+            print(i,j)
+
+            if i > 1:
+                data_01 = getBernoulliDataset(i, n, 0.5)
+                data_02 = getSynLinearDataset(i, n, err)
+                data_02 = np.delete(data_02, i, 1)
+                data_03 = getSynIndNormalDataset(i, n, mu, var)
+                # print('datasets:')
+                # print(data_01)
+                # print(data_02)
+                temp_01.append(getSumSquaresCovariance(data_01))
+                temp_02.append(getSumSquaresCovariance(data_02))
+                temp_03.append(getSumSquaresCovariance(data_03))
+
+                data_01 = []; data_02 = []; data_02 = []
+
+        if i > 1:
+            ss_cov_01.append(np.sum(temp_01)/simulations)
+            ss_cov_02.append(np.sum(temp_02)/simulations)
+            ss_cov_03.append(np.sum(temp_03)/simulations)
+            temp_01 = []; temp_02 = []; temp_03 = []
+
+    print('feature_vec')
+    print(feature_vec)
+    print(ss_cov_01)
+    print(ss_cov_02)
+    print(ss_cov_03)
+
+    plt.title('Observations (n)= %d' % n)
+    plt.suptitle('The Sum of Squares (Covariances)', x=0.514, y=0.96, fontsize=10)
+    plt.plot(feature_vec, ss_cov_01, '-o', label='Bernoulli (prob = 0.5)')
+    plt.plot(feature_vec, ss_cov_02, '-o', label='Linear Models')
+    plt.plot(feature_vec, ss_cov_03, '-o', label='Normal ($\mu = 0, \sigma^2 = %.1f$)' %var)
+    plt.xlabel('number of features (p)', fontsize=12)
+    plt.ylabel('the sum of squares', fontsize=12)
+    plt.legend(loc='upper left')
+
+    plt.savefig('sum_squares%d.png' % n)
+
 
 # Getting Data Visualization of a Synthetic Dataset
 def getDataVisualization(data_type, features, observastions, error, mu, variance):
@@ -489,8 +564,8 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
     n_int = n_interval
     err = error
     simulations = num_simulations
-    depth = rf_depth
-    state = rf_state
+    # depth = rf_depth
+    # state = rf_state
     type_x = data_type
 
     comparison = []
@@ -582,14 +657,14 @@ p_int = 2
 n_int = 10
 
 mu = 0
-variance = 0.2
-# variance = 0.8
+# variance = 0.2
+variance = 0.8
 # variance = 1.6
 # variance = 3.2
 
 simulations = 100
 
-features = 2
+features = 20
 observations = 1000
 
 # features = 100
@@ -610,5 +685,6 @@ data_type = 'linear'
 # print(data)
 # print('prediction')
 # print(getNormalDataPrediction(data, 10, 1, 'shuffle'))
-getDataVisualization(data_type, features, observations, err, mu, variance)
+SSCovarianceVisualization(features, observations, p_int, n_int, err, simulations, mu, variance, random)
+# getDataVisualization(data_type, features, observations, err, mu, variance)
 # getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
