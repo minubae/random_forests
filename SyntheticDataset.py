@@ -59,21 +59,29 @@ def getSynLinearDataset(features,observations, error):
     return x_data
 
 # Creating Synthetic Independently Normal Distributed Dataset
-def getSynIndNormalDataset(features, observations, mu, variance):
+def getSynNormalDataset(features, observations, variance):
 
     p = features
     n = observations
     data_x = []
 
-    m = mu
+    # mu = np.random.randn(p)
+    mu = np.random.uniform(-1, 1, p)
     var = variance
 
-    for i in range(n):
-        x_i = np.random.normal(m, var, p)
+    # print(mu)
+
+    for i in range(p):
+        print(i)
+        x_i = np.random.normal(mu[i], variance, n) #mu[i]
         # x_i = np.random.uniform(-1, 1, p)
         data_x.append(x_i)
 
-    data_x = np.array(data_x)
+
+    data_x = np.transpose(np.array(data_x))
+
+    # print(data_x)
+    # data_x = np.array(data_x)
 
     return data_x
 
@@ -148,7 +156,7 @@ def getBernoulliPrediction(data):
         # print('y (logical_or): ', y)
         # print('y (logical_and): ', y2)
         Y.append(y)
-        print(y)
+        # print(y)
 
     Y = np.array(Y)
     return Y
@@ -164,11 +172,11 @@ def getLinearDataPrediction(data):
         if x[p-2] <= x[p-1]:
             y = 1
             prediction.append(y)
-            print(y)
+            # print(y)
         else:
             y = 0
             prediction.append(y)
-            print(y)
+            # print(y)
 
     prediction = np.array(prediction)
     return prediction
@@ -239,7 +247,7 @@ def getNormalDataPrediction(data, features, portion, shuffle):
 
         num = logical_count(y, 0.5)
         output.append(num)
-        print(num)
+        # print(num)
 
         # y_i = np.sum(y)
         # output.append(y_i)
@@ -250,7 +258,7 @@ def getNormalDataPrediction(data, features, portion, shuffle):
     return output
 
 # Getting Accuracies from Decision Tree and Random Forest Predictions #rf_depth, rf_state
-def getAccuracyPredictions(data_type, features, observations, error, num_simulations, mu, variance, portion, shuffle):
+def getAccuracyPredictions(data_type, features, observations, error, num_simulations, variance, portion, shuffle):
 
     tree_accuracy = 0
     rf_accuracy = 0
@@ -271,7 +279,7 @@ def getAccuracyPredictions(data_type, features, observations, error, num_simulat
     n = observations
     p = features
 
-    m = mu
+    # m = mu
     var = variance
 
     depth = rf_depth
@@ -281,6 +289,8 @@ def getAccuracyPredictions(data_type, features, observations, error, num_simulat
     random = shuffle
 
     for i in range(N):
+
+        print(i)
 
         if type_x == 'linear':
 
@@ -300,10 +310,10 @@ def getAccuracyPredictions(data_type, features, observations, error, num_simulat
 
         elif type_x == 'normal':
 
-            train_x = getSynIndNormalDataset(p, n, m, var)
+            train_x = getSynNormalDataset(p, n, var)
             train_y = getNormalDataPrediction(train_x, p, por, random)
 
-            test_x = getSynIndNormalDataset(p, n, m, var)
+            test_x = getSynNormalDataset(p, n, var)
             test_y = getNormalDataPrediction(test_x, p, por, random)
 
 
@@ -359,7 +369,7 @@ def getSumSquaresCovariance(data):
 
     return sum_squares
 
-def SSCovarianceVisualization(features, observations, p_interval, n_interval, error, num_simulations, mu, variance, shuffle):
+def SSCovarianceVisualization(features, observations, p_interval, n_interval, error, num_simulations, variance, shuffle):
 
     err = error
     p = features
@@ -369,7 +379,6 @@ def SSCovarianceVisualization(features, observations, p_interval, n_interval, er
     simulations = num_simulations
     random = shuffle
     var = variance
-    m = mu
 
     feature_vec = []
     data_01 = []; temp_01 = []
@@ -393,7 +402,7 @@ def SSCovarianceVisualization(features, observations, p_interval, n_interval, er
                 data_01 = getBernoulliDataset(i, n, 0.5)
                 data_02 = getSynLinearDataset(i, n, err)
                 data_02 = np.delete(data_02, i, 1)
-                data_03 = getSynIndNormalDataset(i, n, mu, var)
+                data_03 = getSynNormalDataset(i, n, var)
                 # print('datasets:')
                 # print(data_01)
                 # print(data_02)
@@ -419,23 +428,21 @@ def SSCovarianceVisualization(features, observations, p_interval, n_interval, er
     plt.suptitle('The Sum of Squares (Covariances)', x=0.514, y=0.96, fontsize=10)
     plt.plot(feature_vec, ss_cov_01, '-o', label='Bernoulli (prob = 0.5)')
     plt.plot(feature_vec, ss_cov_02, '-o', label='Linear Models')
-    plt.plot(feature_vec, ss_cov_03, '-o', label='Normal ($\mu = 0, \sigma^2 = %.1f$)' %var)
+    plt.plot(feature_vec, ss_cov_03, '-o', label='Normal (p-means, $\sigma^2 = %.1f$)' %var)
     plt.xlabel('number of features (p)', fontsize=12)
     plt.ylabel('the sum of squares', fontsize=12)
     plt.legend(loc='upper left')
 
-    plt.savefig('sum_squares%d.png' % n)
+    plt.savefig('sum_squares_%.1f.png' %var)
 
 
 # Getting Data Visualization of a Synthetic Dataset
-def getDataVisualization(data_type, features, observastions, error, mu, variance):
+def getDataVisualization(data_type, features, observastions, error, variance):
 
     p = features
     n = observastions
     err = error
     type_x = data_type
-
-    m = mu
     var = variance
 
     if type_x == 'linear':
@@ -471,7 +478,7 @@ def getDataVisualization(data_type, features, observastions, error, mu, variance
             ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
             ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
         #display
-        plt.show()
+        # plt.show()
 
     elif type_x == 'bernoulli':
 
@@ -508,17 +515,17 @@ def getDataVisualization(data_type, features, observastions, error, mu, variance
             ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
 
         #display
-        plt.show()
+        # plt.show()
 
     elif type_x == 'normal':
 
-        data_x = getSynIndNormalDataset(p, n, m, var)
+        data_x = getSynNormalDataset(p, n, var)
         data_x_trp = np.transpose(data_x)
 
         if p == 2:
 
             plt.title('Observations (n) = %d' % n)
-            plt.suptitle('Normally Distributed Data ($\mu = 0, \sigma^2 = %.1f$)' %var, x=0.514, y=0.96, fontsize=10)
+            plt.suptitle('Normally Distributed Data (p-variate means, $\sigma^2 = %.1f$)' %var, x=0.514, y=0.96, fontsize=10)
             # plt.text(1.5, 2.3, r'$\mu = %d$' %m)
             # plt.text(1.5, 2.1, r'$\sigma^2 = %.1f$' % var)
 
@@ -528,7 +535,7 @@ def getDataVisualization(data_type, features, observastions, error, mu, variance
             plt.xlabel('X1', fontsize=12)
             plt.ylabel('X2', fontsize=12)
             # plt.axis([0, 1, -1, 1])
-            plt.axis([-4, 4, -4, 4])
+            plt.axis([-2.0, 2.0, -2.0, 2.0])
             plt.legend(loc='upper right')
 
             plt.savefig('normal_data_%.1f.png' % var)
@@ -548,15 +555,17 @@ def getDataVisualization(data_type, features, observastions, error, mu, variance
             ax.tick_params(axis='both',which='minor',length=5,width=2,labelsize=10)
             ax.tick_params(axis='both',which='major',length=8,width=2,labelsize=10)
 
+            plt.savefig('normal_data_%.1f.png' % var)
+
         #display
-        plt.show()
+        # plt.show()
 
     else:
 
         return "Sorry, We can not visualize your data."
 
 # Getting Data Visualization of Accuracies from Decision Tree and Random Forest Predictions # rf_depth, rf_state
-def getComparisonVisualization(data_type, features, observations, p_interval, n_interval, error, num_simulations, mu, variance, shuffle):
+def getComparisonVisualization(data_type, features, observations, p_interval, n_interval, error, num_simulations, variance, shuffle):
 
     p = features
     n = observations
@@ -573,7 +582,6 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
     acc_vec = []
     temp = []
 
-    m = mu
     var = variance
     random = shuffle
 
@@ -581,7 +589,7 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
 
     for i in range(2, p, p_int):
         feature_vec.append(i)
-        acc_vec = getAccuracyPredictions(type_x, i, n, err, simulations, m, var, p_int, random)
+        acc_vec = getAccuracyPredictions(type_x, i, n, err, simulations, var, p_int, random)
         comparison.append(acc_vec)
 
     comparison = np.array(comparison)
@@ -628,8 +636,8 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
     elif type_x == 'normal':
 
         plt.title('Observations (n) = %d' % n)
-        plt.suptitle('Normally Distributed Data ($\mu = 0, \sigma^2 = %.1f$)' %var, x=0.514, y=0.96, fontsize=10)
-        plt.text(0, 0, r'$\mu = %d$' %m)
+        plt.suptitle('Normally Distributed Data (p-variate means, $\sigma^2 = %.1f$)' %var, x=0.514, y=0.96, fontsize=10)
+        # plt.text(0, 0, r'$\mu = 0$')
         # plt.text(0, 0, r'$\sigma^2 = %.1f$' % var)
 
         plt.plot(feature_vec, tree_accuracy, '-o', label='Decision Tree')
@@ -640,7 +648,7 @@ def getComparisonVisualization(data_type, features, observations, p_interval, n_
 
         plt.savefig('normal_figure_%.1f.png' % var)
 
-    plt.show()
+    # plt.show()
 
         # return comparison
 
@@ -656,16 +664,16 @@ err = 0.2
 p_int = 2
 n_int = 10
 
-mu = 0
+# mu = 0
 # variance = 0.2
+# variance = 0.4
+# variance = 0.6
 variance = 0.8
-# variance = 1.6
-# variance = 3.2
 
 simulations = 100
 
-features = 20
-observations = 1000
+features = 2
+observations = 100
 
 # features = 100
 # observations = 200
@@ -677,14 +685,14 @@ random = 'shuffle'
 
 # Data Type: 'bernoulli', 'linear', 'normal'
 # data_type = 'bernoulli'
-# data_type = 'normal'
-data_type = 'linear'
+data_type = 'normal'
+# data_type = 'linear'
 
 
-# data = getSynIndNormalDataset(10, 10, mu, variance)
+# data = getSynNormalDataset(10, 10, variance)
 # print(data)
 # print('prediction')
 # print(getNormalDataPrediction(data, 10, 1, 'shuffle'))
-SSCovarianceVisualization(features, observations, p_int, n_int, err, simulations, mu, variance, random)
-# getDataVisualization(data_type, features, observations, err, mu, variance)
-# getComparisonVisualization(data_type, features, observations, p_int, n_int, err, simulations, mu, variance, random)
+# SSCovarianceVisualization(40 , 800, p_int, n_int, err, simulations, variance, random)
+# getDataVisualization(data_type, features, observations, err, variance)
+# getComparisonVisualization(data_type, 100, 800, p_int, n_int, err, simulations, variance, random)
