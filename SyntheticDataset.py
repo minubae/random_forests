@@ -535,7 +535,7 @@ def getDataVisualization(data_type, features, observastions, error, variance):
             plt.xlabel('X1', fontsize=12)
             plt.ylabel('X2', fontsize=12)
             # plt.axis([0, 1, -1, 1])
-            plt.axis([-2.0, 2.0, -2.0, 2.0])
+            plt.axis([-1.0, 1.0, -1.0, 1.0])
             plt.legend(loc='upper right')
 
             plt.savefig('normal_data_%.1f.png' % var)
@@ -666,9 +666,9 @@ n_int = 10
 
 # mu = 0
 # variance = 0.2
+variance = 0.3
 # variance = 0.4
 # variance = 0.6
-variance = 0.8
 
 simulations = 100
 
@@ -693,6 +693,6 @@ data_type = 'normal'
 # print(data)
 # print('prediction')
 # print(getNormalDataPrediction(data, 10, 1, 'shuffle'))
-# SSCovarianceVisualization(40 , 800, p_int, n_int, err, simulations, variance, random)
+# SSCovarianceVisualization(60 , 800, p_int, n_int, err, simulations, variance, random)
 # getDataVisualization(data_type, features, observations, err, variance)
-# getComparisonVisualization(data_type, 100, 800, p_int, n_int, err, simulations, variance, random)
+getComparisonVisualization(data_type, 100, 800, p_int, n_int, err, simulations, variance, random)
